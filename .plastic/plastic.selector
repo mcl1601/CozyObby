@@ -1,0 +1,4 @@
+repository "CozyObby@Squatch@cloud"
+  path "/"
+    br "/main"
+    co "/main"
