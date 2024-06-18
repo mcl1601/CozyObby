@@ -1031,3 +1031,14 @@ Running halffloat2hdr "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_fi
 Running combineSH  "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LM0_L1.tga" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1z.lz4"
 Running halffloat2hdr "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L0.lz4" "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LMA1_L0.hdr" 1024
 Running combineSH  "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LMA1_L1.tga" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1z.lz4"
+Done
+initShaders done
+initScene done
+Done
+initShaders done
+initScene done
+Done
+initShaders done
+initScene done
+Done
+Done
