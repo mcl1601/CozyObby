@@ -1042,3 +1042,101 @@ initShaders done
 initScene done
 Done
 Done
+2024-6-18
+Rendering UV GBuffer for CozyObby_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for CozyObby_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\mcdli\AppData\Local\Temp\frender" "uvpos_CozyObby_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\mcdli\AppData\Local\Temp\frender" "uvpos_CozyObby_LM0.lz4" 2 0 0 0
+Running ftraceRTX ao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_ao" 8 16 1
+Running ftraceRTX ao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_ao" 8 16 0
+Running ftraceRTX arealightsh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_1_1" 1924 0 1 lights0.bin
+Running ftraceRTX batchpointlightshlegacy "C:\Users\mcdli\AppData\Local\Temp\frender" "PointBatch_1_0_0" 1924 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX skysh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_2_1" 1924 0 1 sky0.bin
+Running ftraceRTX addmul "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX arealightsh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_1_0" 1924 0 0 lights0.bin
+Running ftraceRTX batchpointlightshlegacy "C:\Users\mcdli\AppData\Local\Temp\frender" "PointBatch_0_0_0" 1924 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX skysh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_2_0" 1924 0 0 sky0.bin
+Running ftraceRTX addmul "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA10.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM00.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA11.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM01.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA12.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM02.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA13.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM03.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgish "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_final" 1924 16 1 "gi_CozyObby_LMA14.bin" "CozyObby_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgish "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_final" 1924 16 0 "gi_CozyObby_LM04.bin" "CozyObby_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX addsh "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_final_" 4 0 1 shcomp_1.bin
+Running ftraceRTX addao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_final_L0.lz4" 4 0 1 addao_1.bin
+Running denoiserOIDN s "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L0.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1z.lz4" 2048 0
+Running seamfixer "C:\Users\mcdli\AppData\Local\Temp\frender" "1" "CozyObby_LMA1_final_L0.lz4" "CozyObby_LMA1_final_L1x.lz4" "CozyObby_LMA1_final_L1y.lz4" "CozyObby_LMA1_final_L1z.lz4"
+Running ftraceRTX addsh "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_final_" 4 0 0 shcomp_0.bin
+Running ftraceRTX addao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_final_L0.lz4" 4 0 0 addao_0.bin
+Running denoiserOIDN s "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L0.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1z.lz4" 2048 0
+Running seamfixer "C:\Users\mcdli\AppData\Local\Temp\frender" "0" "CozyObby_LM0_final_L0.lz4" "CozyObby_LM0_final_L1x.lz4" "CozyObby_LM0_final_L1y.lz4" "CozyObby_LM0_final_L1z.lz4"
+Running halffloat2hdr "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L0.lz4" "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LMA1_L0.hdr" 1024
+Running combineSH  "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LMA1_L1.tga" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1z.lz4"
+Running halffloat2hdr "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L0.lz4" "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LM0_L0.hdr" 1024
+Running combineSH  "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LM0_L1.tga" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1z.lz4"
+2024-6-19
+Rendering UV GBuffer for CozyObby_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for CozyObby_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\mcdli\AppData\Local\Temp\frender" "uvpos_CozyObby_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\mcdli\AppData\Local\Temp\frender" "uvpos_CozyObby_LM0.lz4" 2 0 0 0
+Running ftraceRTX ao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_ao" 8 16 1
+Running ftraceRTX ao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_ao" 8 16 0
+Running ftraceRTX arealightsh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_1_1" 1924 0 1 lights0.bin
+Running ftraceRTX batchpointlightshlegacy "C:\Users\mcdli\AppData\Local\Temp\frender" "PointBatch_1_0_0" 1924 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX skysh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_2_1" 1924 0 1 sky0.bin
+Running ftraceRTX addmul "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX arealightsh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_1_0" 1924 0 0 lights0.bin
+Running ftraceRTX batchpointlightshlegacy "C:\Users\mcdli\AppData\Local\Temp\frender" "PointBatch_0_0_0" 1924 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX skysh "C:\Users\mcdli\AppData\Local\Temp\frender" "light_2_0" 1924 0 0 sky0.bin
+Running ftraceRTX addmul "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA10.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM00.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA11.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM01.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA12.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM02.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_diffuse" 4 16 1 "gi_CozyObby_LMA13.bin" "CozyObby_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_diffuse" 4 16 0 "gi_CozyObby_LM03.bin" "CozyObby_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgish "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_final" 1924 16 1 "gi_CozyObby_LMA14.bin" "CozyObby_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgish "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_final" 1924 16 0 "gi_CozyObby_LM04.bin" "CozyObby_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX addsh "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_final_" 4 0 1 shcomp_1.bin
+Running ftraceRTX addao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LMA1_final_L0.lz4" 4 0 1 addao_1.bin
+Running denoiserOIDN s "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L0.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1z.lz4" 2048 0
+Running seamfixer "C:\Users\mcdli\AppData\Local\Temp\frender" "1" "CozyObby_LMA1_final_L0.lz4" "CozyObby_LMA1_final_L1x.lz4" "CozyObby_LMA1_final_L1y.lz4" "CozyObby_LMA1_final_L1z.lz4"
+Running ftraceRTX addsh "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_final_" 4 0 0 shcomp_0.bin
+Running ftraceRTX addao "C:\Users\mcdli\AppData\Local\Temp\frender" "CozyObby_LM0_final_L0.lz4" 4 0 0 addao_0.bin
+Running denoiserOIDN s "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L0.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1z.lz4" 2048 0
+Running seamfixer "C:\Users\mcdli\AppData\Local\Temp\frender" "0" "CozyObby_LM0_final_L0.lz4" "CozyObby_LM0_final_L1x.lz4" "CozyObby_LM0_final_L1y.lz4" "CozyObby_LM0_final_L1z.lz4"
+Running halffloat2hdr "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L0.lz4" "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LMA1_L0.hdr" 1024
+Running combineSH  "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LMA1_L1.tga" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LMA1_final_L1z.lz4"
+Running halffloat2hdr "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L0.lz4" "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LM0_L0.hdr" 1024
+Running combineSH  "C:/Users/mcdli/Documents/Projects/Unity/Worlds/CozyObby/Assets/BakeryLightmaps/CozyObby_LM0_L1.tga" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1x.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1y.lz4" "C:\Users\mcdli\AppData\Local\Temp\frender/CozyObby_LM0_final_L1z.lz4"

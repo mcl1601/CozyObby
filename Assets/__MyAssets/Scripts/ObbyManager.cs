@@ -47,7 +47,6 @@ public class ObbyManager : UdonSharpBehaviour
 
     void Start()
     {
-        useDevTP = true;
         isRunning = false;
         showingUI = false;
         bestTimes = new float[collectedCPs.Length];
