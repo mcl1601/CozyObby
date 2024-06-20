@@ -670,7 +670,7 @@ Material:
     - _Cutoff: 0.5
     - _CutoutSharpness: 0.0001
     - _DFClones: 0
-    - _DebuggingGroup: 0
+    - _DebuggingGroup: 1
     - _DebuggingLog: 0
     - _Decal0Group: 0
     - _Decal1Group: 0
@@ -882,7 +882,7 @@ Material:
     - _FurShapeMask2Bits: 0
     - _FurShapeMask3Bits: 0
     - _FurShapeMask4Bits: 0
-    - _FurShellSpacing: 0.087
+    - _FurShellSpacing: 0.052
     - _FurTouchRange: 3.5
     - _FurTouchStrength: 0
     - _FurTouchThreshold: 0.15
@@ -1126,7 +1126,7 @@ Material:
     - _PulseStr: 0.5
     - _PulseToggle: 0
     - _PulseWaveform: 0
-    - _QualityGroup: 0
+    - _QualityGroup: 1
     - _QueueOffset: 0
     - _RTDirectCont: 1
     - _RTIndirectCont: 1
@@ -1203,7 +1203,7 @@ Material:
     - _SaturationDet: 1
     - _SaturationEmiss: 1
     - _SaturationPost: 1
-    - _ScaleCalibration: 0.8
+    - _ScaleCalibration: 1.6
     - _ScatterAlbedoTint: 0
     - _ScatterAmbient: 0
     - _ScatterBaseColorTint: 0
@@ -1369,14 +1369,14 @@ Material:
     - _UtilitySourceMask: 2
     - _UtilityTargetChannel: 0
     - _UtilityValue: 0
-    - _V4Quality2D: 2
+    - _V4Quality2D: 3
     - _V4Quality2DMirror: 2
     - _V4QualityCameraPhoto: 15
     - _V4QualityCameraView: 1
     - _V4QualityEditor: 5
     - _V4QualityScreenshot: 15
     - _V4QualityStreamCamera: 2
-    - _V4QualityVR: 1
+    - _V4QualityVR: 2
     - _V4QualityVRMirror: 1
     - _VLightCont: 1
     - _VRCFallback: 1
