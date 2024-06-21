@@ -113,7 +113,7 @@ Material:
     - _BAKERY_MONOSH: 1
     - _BICUBIC_LIGHTMAP: 0
     - _BakeryAlphaDither: 0
-    - _BumpScale: 1
+    - _BumpScale: 4.61
     - _Cull: 2
     - _Cutoff: 0.5
     - _CutoutSharpness: 0.0001
@@ -138,7 +138,7 @@ Material:
     - _ParallaxOffset: 0
     - _ParallaxSteps: 16
     - _Reflectance: 0.5
-    - _Roughness: 0.078
+    - _Roughness: 0.245
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 0
     - _SpecularOcclusion: 1

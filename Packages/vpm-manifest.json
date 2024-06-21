@@ -38,6 +38,9 @@
     },
     "dev.architech.protv.extras": {
       "version": "0.8.0-beta"
+    },
+    "aurycat.udonportals": {
+      "version": "1.4.1"
     }
   },
   "locked": {
@@ -108,6 +111,12 @@
       "version": "0.8.0-beta",
       "dependencies": {
         "dev.architech.protv": "^3.0.0-beta.13.2"
+      }
+    },
+    "aurycat.udonportals": {
+      "version": "1.4.1",
+      "dependencies": {
+        "com.vrchat.worlds": "^3.2.2"
       }
     }
   }

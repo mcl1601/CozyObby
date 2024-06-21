@@ -92,8 +92,8 @@ public class ObbyManager : UdonSharpBehaviour
     #region Race Stuff
     private string FormatTime(TimeSpan sp)
     {
-        string toReturn = "<mspace=0.55em>" + sp.Minutes.ToString() + "</mspace>:<mspace=0.55em>" + 
-            (sp.Seconds > 9 ? sp.Seconds.ToString() : "0" + sp.Seconds.ToString()) + "</mspace>.<mspace=0.55em>" + 
+        string toReturn = "<mspace=0.8em>" + sp.Minutes.ToString() + "</mspace>:<mspace=0.8em>" + 
+            (sp.Seconds > 9 ? sp.Seconds.ToString() : "0" + sp.Seconds.ToString()) + "</mspace>.<mspace=0.8em>" + 
             (sp.Milliseconds > 9 ? (sp.Milliseconds > 99 ? sp.Milliseconds.ToString() : "0" + sp.Milliseconds.ToString()) : "00" + sp.Milliseconds.ToString()) + "</mspace>";
 
         return toReturn;
@@ -399,7 +399,7 @@ public class ObbyManager : UdonSharpBehaviour
         for(int i = 0; i < leaderboardNames.Length; i++)
         {
             if(String.IsNullOrEmpty(leaderboardNames[i])) return;
-            uiPlaces[i].text = (i + 1).ToString() + ". <mspace=0.55em>" + FormatTime(TimeSpan.FromSeconds(leaderboardTimes[i])) + "</mspace>     " + leaderboardNames[i];
+            uiPlaces[i].text = (i + 1).ToString() + ". <mspace=0.8em>" + FormatTime(TimeSpan.FromSeconds(leaderboardTimes[i])) + "</mspace>     " + leaderboardNames[i];
         }
     }
 

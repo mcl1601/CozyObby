@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "aurycat.udonportals": {
+      "version": "file:aurycat.udonportals",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.cyan.cyantrigger": {
       "version": "file:com.cyan.cyantrigger",
       "depth": 0,
