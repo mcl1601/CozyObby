@@ -36,6 +36,7 @@ public class ObbyManager : UdonSharpBehaviour
     private AudioSource audioSource;
     [SerializeField] AudioClip start, finish, cpAudio;
     [SerializeField] Crown goldCrown;
+    [SerializeField] float cheatLimit;
 
     [UdonSynced]
     public string[] leaderboardNames;
@@ -189,6 +190,13 @@ public class ObbyManager : UdonSharpBehaviour
             isRunning = false;
             showingUI = false;
             timerCanvas.SetActive(false);
+
+            if(timer < cheatLimit)
+            {
+                finalTime.text = "CHEATED Doesn't count";
+                return;
+            }
+
             audioSource.clip = finish;
             audioSource.Play();
 
@@ -399,7 +407,9 @@ public class ObbyManager : UdonSharpBehaviour
         for(int i = 0; i < leaderboardNames.Length; i++)
         {
             if(String.IsNullOrEmpty(leaderboardNames[i])) return;
-            uiPlaces[i].text = (i + 1).ToString() + ". <mspace=0.8em>" + FormatTime(TimeSpan.FromSeconds(leaderboardTimes[i])) + "</mspace>     " + leaderboardNames[i];
+            string result = (i + 1).ToString() + ". <mspace=0.8em>" + FormatTime(TimeSpan.FromSeconds(leaderboardTimes[i])) + "</mspace>     " + leaderboardNames[i];
+            uiPlaces[i].text = result;
+            if(i < 3) uiPlaces[i + 10].text = result;
         }
     }
 

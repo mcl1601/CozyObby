@@ -67,6 +67,8 @@ public class GraphicsManager : UdonSharpBehaviour
     private Transform[] ballTransforms;
     private Vector3[] ballPositions;
 
+    [SerializeField] private PoolLeaderboardManager leaderboardManager;
+
     public void _Init(BilliardsModule table_)
     {
         table = table_;
@@ -319,10 +321,19 @@ public class GraphicsManager : UdonSharpBehaviour
         {
             winnerText.text = _FormatName(player1) + " and " + _FormatName(player2) + " win!";
         }
+
+        if(leaderboardManager != null)
+        {
+            leaderboardManager.GameResults((int)winnerId, players);
+        }
     }
 
     public string _FormatName(string name)
     {
+        //custom
+        if(name == "Squatch_") {return rainbow(name);}
+        //------
+
         if (table.nameColorHook == null) return $"<color=#ffffff>{name}</color>";
         if (name == null) return $"<color=#ffffff></color>";
 
@@ -663,6 +674,7 @@ int uniform_cue_colour;
 
     public void _OnGameStarted()
     {
+        Debug.Log(table.gameModeLocal);
         scorecard.SetInt("_GameMode", (int)table.gameModeLocal);
         scorecard.SetInt("_SolidsMode", 0);
         tableMaterial.SetFloat("_TimerPct", 0);

@@ -479,7 +479,128 @@ MonoBehaviour:
   - Assets/simple room SGB/fbx/bed01.fbx
   - Assets/__MyAssets/FBX/VerandaWall.fbx
   - Assets/__MyAssets/FBX/RailingOuterTVSide.fbx
-  uvOverlapAssetList: 00000000ffffffff0101000001010000010100000101000001010000010100000101000001010000010100000101000001010000000000000000000000000000000000000000000001010000000000000000000001010000000000000101000000000000010100000101000000000000000000000101000000000000010100000101000000000000000000000101000000000000010100000101000001010000010100000101000001010000000000000000000001010000010100000000000001010000010100000101000001010000010100000000000000000000000000000000000001010000010100000000000000000000000000000000000000000000000000000101000001010000010100000101000000000000010100000101000001010000010100000101000001010000
+  - Assets/__MyAssets/FBX/VerandaBlankets.fbx
+  - Assets/RED_SIM/FlexiCurve/Presets/Default/Fairy Lights/MiniLight.fbx
+  - Assets/RED_SIM/FlexiCurve/Presets/Default/Spheres/Sphere_Lamp.fbx
+  - Assets/RED_SIM/FlexiCurve/Presets/Default/Flags/TriangleFlag.fbx
+  - Assets/RED_SIM/FlexiCurve/Presets/Default/Flags/Suzanne.fbx
+  - Assets/__MyAssets/FBX/WorldSign.fbx
+  - Assets/__MyAssets/FBX/BedroomBlanket.fbx
+  - Assets/__MyAssets/FBX/BedroomWindows.fbx
+  - Assets/__MyAssets/FBX/PoolWindows.fbx
+  - Assets/__MyAssets/FBX/InnerBedroomWall.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_14.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Other_Tables_2.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_6.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_8.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_10.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Floor_Lamps_6.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Floor_Lamps_5.fbx
+  - Assets/Furniture Pack/Fbx/Couches_L_Couches_Light_Red.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_4.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Kitchen_Tables_1.fbx
+  - Assets/Furniture Pack/Fbx/Bean_Bags_2.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Bar_Chairs_2.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Love_Seat_White.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_11.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Short_Chairs_2.fbx
+  - Assets/Furniture Pack/Fbx/Bean_Bags_1.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_4.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Floor_Lamps_1.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Other_Tables_1.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_2.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Misc_3.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Love_Seat_Green.fbx
+  - Assets/Furniture Pack/Fbx/Bathroom_And_Misc_6.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Chandelier_1.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Floor_Lamps_3.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_13.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_2.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_3.fbx
+  - Assets/Furniture Pack/Fbx/Bathroom_And_Misc_2.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Theatre_Chair_Leather.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Restaurant_Tables_2.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_8.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_3.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Floor_Lamps_4.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Short_Chairs_1.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_7.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_5.fbx
+  - Assets/Furniture Pack/Fbx/Bathroom_And_Misc_3.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_12.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Other_Tables_4.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Curved_Couch_Red.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Single_Sofa_White.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_7.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_5.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Other_Tables_5.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Chandelier_3.fbx
+  - Assets/Furniture Pack/Fbx/Bathroom_And_Misc_5.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Other_Tables_3.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Couch_Green.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_1.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_6.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Bar_Chairs_5.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Single_Sofa_Light_Light_Grey.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Single_Sofa_Light_Comfy_Grey.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Floor_Lamps_2.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Love_Seat_Grey.fbx
+  - Assets/Furniture Pack/Fbx/Rocks_1.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_1.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Bar_Chairs_4.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Kitchen_Tables_2.fbx
+  - Assets/Furniture Pack/Fbx/Pillows_1.fbx
+  - Assets/Furniture Pack/Fbx/Bathroom_And_Misc_4.fbx
+  - Assets/Furniture Pack/Fbx/Rocks_2.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Theatre_Chair_Fabric.fbx
+  - Assets/Furniture Pack/Fbx/Pillows_3.fbx
+  - Assets/Furniture Pack/Fbx/Pillows_2.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Single_Sofa_Light_Grey_With_Pillow.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Single_Sofa_Light_Dark_Grey_With_Pillow.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_5.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_1.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Restaurant_Tables_1.fbx
+  - Assets/Furniture Pack/Fbx/Bathroom_And_Misc_1.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Misc_2.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Bar_Chairs_1.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_10.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_4.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_2.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Kitchen_Tables_3.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_6.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Overhead_1.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Short_Chairs_3.fbx
+  - Assets/Furniture Pack/Fbx/Couches_U_Couch.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_7.fbx
+  - Assets/Furniture Pack/Fbx/Beds_Red_Bed.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Overhead_2.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Misc_1.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Short_Chairs_4.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Chandelier_2.fbx
+  - Assets/Furniture Pack/Fbx/Pillows_4.fbx
+  - Assets/Furniture Pack/Fbx/Couches_L_Couches_Dark_Grey.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_11.fbx
+  - Assets/Furniture Pack/Fbx/Beds_Grey_Bed.fbx
+  - Assets/Furniture Pack/Fbx/Chairs_Bar_Chairs_3.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_9.fbx
+  - Assets/Furniture Pack/Fbx/Couches_Couch_Dark_Blue.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_8.fbx
+  - Assets/Furniture Pack/Fbx/Lights_Table_Lamps_9.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_9.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_3.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Restaurant_Tables_3.fbx
+  - Assets/__MyAssets/FBX/FixedFurniture/Plant13.fbx
+  - Assets/__MyAssets/FBX/FixedFurniture/BeanBagBlanket.fbx
+  - Assets/__MyAssets/FBX/VerandaShelf.fbx
+  - Assets/Wall Ivy/FBX/Wall Ivy.fbx
+  - Assets/Candles/FBX/Candles.fbx
+  - Assets/Shiba Plushie/FBX/Shiba Plushie.fbx
+  - Assets/Fox Plushie/FBX/Fox Plushie.fbx
+  - Assets/Vowgan/Clocks/Sets/Expansion 2023/Models/Clocks 2023.fbx
+  - Assets/Vowgan/Clocks/Sets/Base/Models/Clock_Hands_01.fbx
+  - Assets/Vowgan/Clocks/Sets/Base/Models/Clock_Modern_04.fbx
+  - Assets/Hallway Wall Lights/Fbx/Hallway Wall Lights 1.fbx
+  uvOverlapAssetList: 00000000ffffffff010100000101000001010000010100000101000001010000010100000101000001010000010100000101000000000000000000000000000000000000000000000101000000000000000000000101000000000000010100000000000001010000010100000000000000000000010100000000000001010000010100000000000000000000010100000000000001010000010100000101000001010000010100000101000000000000000000000101000001010000000000000101000001010000010100000101000001010000000000000000000000000000000000000101000001010000000000000000000000000000000000000000000000000000010100000101000001010000010100000000000001010000010100000101000001010000010100000101000001010000000000000000000000000000000000000000000001010000000000000000000001010000010100000000000001010000010100000000000001010000010100000101000001010000010100000000000001010000010100000101000000000000000000000101000001010000000000000101000000000000010100000000000001010000010100000101000001010000010100000000000001010000010100000101000001010000010100000101000001010000010100000000000001010000000000000101000000000000010100000101000000000000010100000101000001010000010100000101000001010000000000000000000001010000010100000101000000000000000000000000000000000000010100000101000000000000010100000000000001010000010100000101000001010000010100000101000000000000000000000101000001010000010100000101000001010000010100000101000000000000010100000101000001010000010100000000000000000000010100000000000001010000010100000101000000000000010100000101000001010000010100000000000001010000000000000101000000000000010100000000000001010000010100000101000000000000000000000000000000000000
   xatlasWarningShown: 0
   foundCompatibleSetup: 1
   gpuName: NVIDIA GeForce RTX 2080 SUPER

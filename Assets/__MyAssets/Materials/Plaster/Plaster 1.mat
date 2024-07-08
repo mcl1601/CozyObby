@@ -113,7 +113,7 @@ Material:
     - _BICUBIC_LIGHTMAP: 0
     - _BakeryAlphaDither: 0
     - _BumpScale: 0.36
-    - _Cull: 0
+    - _Cull: 2
     - _Cutoff: 0.5
     - _CutoutSharpness: 0.0001
     - _DetailAlbedoBlendMode: 0

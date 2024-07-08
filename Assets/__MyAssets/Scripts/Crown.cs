@@ -8,11 +8,12 @@ using VRC.Udon;
 public class Crown : UdonSharpBehaviour
 {
     public VRCPlayerApi _player = null;
-    private Transform crown;
+    private MeshRenderer crown;
     [SerializeField] Vector3 offset;
+    
     void Start()
     {
-        crown = transform.GetChild(0);
+        crown = transform.GetChild(0).GetComponent<MeshRenderer>();
     }
 
     void Update()
@@ -28,11 +29,13 @@ public class Crown : UdonSharpBehaviour
         _player = p;
         if(p == null)
         {
-            crown.gameObject.SetActive(false);
+            crown.enabled = false;
+            //crown.gameObject.SetActive(false);
         }
         else
         {
-            crown.gameObject.SetActive(true);
+            crown.enabled = true;
+            //crown.gameObject.SetActive(true);
         }
     }
 
@@ -41,7 +44,8 @@ public class Crown : UdonSharpBehaviour
         if(player == _player)
         {
             _player = null;
-            crown.gameObject.SetActive(false);
+            //crown.gameObject.SetActive(false);
+            crown.enabled = false;
         }
     }
 }

@@ -1015,7 +1015,7 @@ Material:
     - _LightPenetrationDepth: 0.1
     - _LightWraparound: 7.5
     - _LightingBasedIOR: 0
-    - _LightingGroup: 0
+    - _LightingGroup: 1
     - _MainMapsGroup: 1
     - _MainTexRot: 0
     - _MainTexTint: 0
@@ -1087,7 +1087,7 @@ Material:
     - _NoiseSpeed: 0.5
     - _NonlinearSHToggle: 1
     - _OcclusionChannel: 0
-    - _OcclusionGroup: 0
+    - _OcclusionGroup: 1
     - _OcclusionMult: 0
     - _OcclusionStrength: 1
     - _OcclusionUVSet: 0
@@ -1107,7 +1107,7 @@ Material:
     - _OverrideScale: 1
     - _PBRWorkflow: 0
     - _PBSSkin: 0.1
-    - _PBSSkinGroup: 0
+    - _PBSSkinGroup: 1
     - _PBSSkinStrength: 1
     - _PackedRoughPreview: 0
     - _Parallax: 0.1217
