@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CPGate
-  m_Shader: {fileID: 4800000, guid: 1c1f00a33b350674688fd00d84570bcd, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5581867571c326645823c781ac2edbab, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -21,8 +21,8 @@ Material:
   - _LIGHTINGMODE_REALISTIC
   - _RIMSTYLE_POIYOMI
   - _TPS_ANIMATEDTOGGLE_ON
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
   stringTagMap:
@@ -1769,7 +1769,7 @@ Material:
     - m_mainCategory: 1
     - m_modifierCategory: 0
     - m_postprocessing: 0
-    - m_renderingCategory: 0
+    - m_renderingCategory: 1
     - m_specialFXCategory: 1
     - m_start_ALDecalSpectrum: 0
     - m_start_Alpha: 0
@@ -1818,7 +1818,7 @@ Material:
     - m_start_UVTileDissolveRow3: 0
     - m_start_audioLink: 0
     - m_start_backFace: 0
-    - m_start_bakedLighting: 0
+    - m_start_bakedLighting: 1
     - m_start_blending: 0
     - m_start_brdf: 0
     - m_start_clearCoat: 0
@@ -1988,7 +1988,7 @@ Material:
     - _EmissionAL2StrengthMod: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionAL3Multipliers: {r: 1, g: 1, b: 0, a: 0}
     - _EmissionAL3StrengthMod: {r: 0, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 9.734288, g: 9.734288, b: 9.734288, a: 1}
+    - _EmissionColor: {r: 3.9533498, g: 3.9533498, b: 3.9533498, a: 1}
     - _EmissionColor1: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor2: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor3: {r: 1, g: 1, b: 1, a: 1}

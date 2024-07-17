@@ -2441,14 +2441,14 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				#if defined(PROP_EMISSIONMAP) || !defined(OPTIMIZER_ENABLED)
 				if (!float(0))
 				{
-					emissionColor0 = POI2D_SAMPLER_PAN(_EmissionMap, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)), float4(0,0,0,0)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(9.734288,9.734288,9.734288,1).rgb, float(0));
+					emissionColor0 = POI2D_SAMPLER_PAN(_EmissionMap, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)), float4(0,0,0,0)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(3.95335,3.95335,3.95335,1).rgb, float(0));
 				}
 				else
 				{
-					emissionColor0 = UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionMap, _MainTex, ((.5 + poiLight.nDotV * .5) * float4(1,1,0,0).xy) + _Time.x * float(5)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(9.734288,9.734288,9.734288,1).rgb, float(0));
+					emissionColor0 = UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionMap, _MainTex, ((.5 + poiLight.nDotV * .5) * float4(1,1,0,0).xy) + _Time.x * float(5)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(3.95335,3.95335,3.95335,1).rgb, float(0));
 				}
 				#else
-				emissionColor0 = lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(9.734288,9.734288,9.734288,1).rgb, float(0));
+				emissionColor0 = lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(3.95335,3.95335,3.95335,1).rgb, float(0));
 				#endif
 				if (float(1))
 				{
@@ -2460,12 +2460,12 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 					if (float(0))
 					{
 						#if defined(PROP_EMISSIONSCROLLINGCURVE) || !defined(OPTIMIZER_ENABLED)
-						emissionStrength0 *= UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionScrollingCurve, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)) + (dot(pos, float4(0,-10,0,0).xyz) * float(100)) + _Time.x * float(100)).r;
+						emissionStrength0 *= UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionScrollingCurve, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)) + (dot(pos, float4(10,0,0,0).xyz) * float(100)) + _Time.x * float(100)).r;
 						#endif
 					}
 					else
 					{
-						emissionStrength0 *= calculateScrollingEmission(float4(0,-10,0,0).xyz, float(100), float(100), float(2), float(0), pos);
+						emissionStrength0 *= calculateScrollingEmission(float4(10,0,0,0).xyz, float(100), float(100), float(2), float(0), pos);
 					}
 				}
 				if (float(0))
@@ -8033,14 +8033,14 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				#if defined(PROP_EMISSIONMAP) || !defined(OPTIMIZER_ENABLED)
 				if (!float(0))
 				{
-					emissionColor0 = POI2D_SAMPLER_PAN(_EmissionMap, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)), float4(0,0,0,0)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(9.734288,9.734288,9.734288,1).rgb, float(0));
+					emissionColor0 = POI2D_SAMPLER_PAN(_EmissionMap, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)), float4(0,0,0,0)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(3.95335,3.95335,3.95335,1).rgb, float(0));
 				}
 				else
 				{
-					emissionColor0 = UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionMap, _MainTex, ((.5 + poiLight.nDotV * .5) * float4(1,1,0,0).xy) + _Time.x * float(5)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(9.734288,9.734288,9.734288,1).rgb, float(0));
+					emissionColor0 = UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionMap, _MainTex, ((.5 + poiLight.nDotV * .5) * float4(1,1,0,0).xy) + _Time.x * float(5)).rgb * lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(3.95335,3.95335,3.95335,1).rgb, float(0));
 				}
 				#else
-				emissionColor0 = lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(9.734288,9.734288,9.734288,1).rgb, float(0));
+				emissionColor0 = lerp(1, poiFragData.baseColor, float(0)).rgb * poiThemeColor(poiMods, float4(3.95335,3.95335,3.95335,1).rgb, float(0));
 				#endif
 				if (float(1))
 				{
@@ -8052,12 +8052,12 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 					if (float(0))
 					{
 						#if defined(PROP_EMISSIONSCROLLINGCURVE) || !defined(OPTIMIZER_ENABLED)
-						emissionStrength0 *= UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionScrollingCurve, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)) + (dot(pos, float4(0,-10,0,0).xyz) * float(100)) + _Time.x * float(100)).r;
+						emissionStrength0 *= UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionScrollingCurve, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)) + (dot(pos, float4(10,0,0,0).xyz) * float(100)) + _Time.x * float(100)).r;
 						#endif
 					}
 					else
 					{
-						emissionStrength0 *= calculateScrollingEmission(float4(0,-10,0,0).xyz, float(100), float(100), float(2), float(0), pos);
+						emissionStrength0 *= calculateScrollingEmission(float4(10,0,0,0).xyz, float(100), float(100), float(2), float(0), pos);
 					}
 				}
 				if (float(0))

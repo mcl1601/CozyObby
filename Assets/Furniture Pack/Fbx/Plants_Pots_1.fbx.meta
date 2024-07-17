@@ -51,7 +51,8 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    extraUserProperties: []
+    extraUserProperties:
+    - '#BAKERY{"meshName":["Cylinder.115"],"padding":[128],"unwrapper":[1]}'
     clipAnimations: []
     isReadable: 1
   meshes:

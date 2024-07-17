@@ -14,4 +14,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiedAssetPathList:
   - Assets/Bakery/examples/content/sponza/sponza.FBX
-  modifiedAssetPaddingHash: d6a958ff
+  - Assets/__MyAssets/FBX/CPGate.fbx
+  - Assets/__MyAssets/FBX/OBCube.fbx
+  - Assets/__MyAssets/FBX/PoolLight.fbx
+  - Assets/__MyAssets/FBX/Stairs.fbx
+  - Assets/__MyAssets/FBX/RailingOuterTVSide.fbx
+  - Assets/__MyAssets/FBX/WorldSign.fbx
+  - Assets/__MyAssets/FBX/HouseWalls.fbx
+  - Assets/__MyAssets/FBX/TV.fbx
+  - Assets/__MyAssets/FBX/Floor2.fbx
+  - Assets/__MyAssets/FBX/VerandaBlankets.fbx
+  - Assets/__MyAssets/FBX/BigCouch.fbx
+  - Assets/__MyAssets/FBX/Halfwall.fbx
+  - Assets/__MyAssets/FBX/FloorPlane.fbx
+  - Assets/__MyAssets/FBX/RailingOuter.fbx
+  - Assets/__MyAssets/FBX/Portal.fbx
+  - Assets/Furniture Pack/Fbx/Plants_Pots_1.fbx
+  - Assets/Vowgan/Clocks/Sets/Base/Models/Clock_Desk.fbx
+  - Assets/__MyAssets/FBX/BenchWCushions.fbx
+  - Assets/__MyAssets/FBX/BedroomWall.fbx
+  - Assets/__MyAssets/FBX/PoolWindows.fbx
+  - Assets/__MyAssets/FBX/LowRailing.fbx
+  - Assets/__MyAssets/FBX/BedroomBlanket.fbx
+  - Assets/__MyAssets/FBX/VerandaWall.fbx
+  - Assets/Furniture Pack/Fbx/Tables_Side_Tables_6.fbx
+  - Assets/__MyAssets/FBX/FirePitSlab.fbx
+  - Assets/__MyAssets/FBX/FirePit.fbx
+  - Assets/__MyAssets/FBX/InnerBedroomWall.fbx
+  - Assets/__MyAssets/FBX/WallEdge.fbx
+  - Assets/__MyAssets/FBX/RoofTiles.fbx
+  - Assets/__MyAssets/FBX/InsideRoof.fbx
+  - Assets/__MyAssets/FBX/Veranda.fbx
+  - Assets/simple room SGB/fbx/floor_lamp.fbx
+  - Assets/__MyAssets/FBX/BedroomWindows.fbx
+  - Assets/__MyAssets/FBX/StartGate.fbx
+  - Assets/__MyAssets/FBX/CeilingLamps.fbx
+  - Assets/__MyAssets/FBX/RecessLighting.fbx
+  - Assets/__MyAssets/FBX/CueRack.fbx
+  - Assets/__MyAssets/FBX/VerandaShelf.fbx
+  - Assets/Yodokorochan/Yodo_PotatoChips/Models/PotatoChips.fbx
+  - Assets/__MyAssets/FBX/ChalkCube.fbx
+  - Assets/__MyAssets/FBX/WideFrame.fbx
+  - Assets/__MyAssets/FBX/VertFrame.fbx
+  - Assets/__MyAssets/FBX/VinylHolder.fbx
+  - Assets/simple room SGB/fbx/bed01.fbx
+  - Assets/__MyAssets/FBX/NewPoolWindows.fbx
+  - Assets/__MyAssets/FBX/BedroomTV.fbx
+  - Assets/__MyAssets/FBX/BedroomWindowsSplit.fbx
+  - Assets/__MyAssets/FBX/GlassWall.fbx
+  - Assets/__MyAssets/FBX/ObbySphere.fbx
+  modifiedAssetPaddingHash: d6a958ffc25031eed731888331b67b1280c5d890fd7d936395c2a693353fd3d9d41e8234af67e2a8ad66fcb4bb5d625ee55031ee3c4efff0e55031ee9c09ecc0f437ed04ce318883e55031eede09ecc0e55031eea35031eef1f23a06f1f23a06bd4608c8e1c4d89004c5d89080c5d890d2f23a06353fd3d914f33a063e3fd3d9eec3a693323fd3d9c25031ee5bc2a69313a3dddecfc3a693ae5634b7d1318883ecc12491cd5634b7ecc12491ecc124913e3fd3d9115dd67cd5a219641361380480c5d890f8398033

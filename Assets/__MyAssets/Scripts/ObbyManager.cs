@@ -31,7 +31,7 @@ public class ObbyManager : UdonSharpBehaviour
     private RectTransform hudRect;
     private Vector3 hudInit;
     [SerializeField] float hudAdjustValue = 0.02f;
-    [SerializeField] Slider opacitySlider;
+    [SerializeField] Slider opacitySliderEasy, opacitySliderMedium;
     [SerializeField] Image bgImage;
     private AudioSource audioSource;
     [SerializeField] AudioClip start, finish, cpAudio;
@@ -277,11 +277,26 @@ public class ObbyManager : UdonSharpBehaviour
         hudRect.anchoredPosition = hudInit;
     }
 
-    public void AdjustBackgroundOpacity()
+    public void AdjustBackgroundOpacityEasy()
     {
         Color temp = bgImage.color;
-        temp.a = opacitySlider.value;
+        temp.a = opacitySliderEasy.value;
         bgImage.color = temp;
+
+        if(!opacitySliderMedium) return;
+
+        opacitySliderMedium.value = opacitySliderEasy.value;
+    }
+
+    public void AdjustBackgroundOpacityMedium()
+    {
+        Color temp = bgImage.color;
+        temp.a = opacitySliderMedium.value;
+        bgImage.color = temp;
+
+        if(!opacitySliderEasy) return;
+
+        opacitySliderEasy.value = opacitySliderMedium.value;
     }
 
     public void ScaleHUDUp()
