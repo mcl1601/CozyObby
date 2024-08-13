@@ -332,6 +332,10 @@ public class GraphicsManager : UdonSharpBehaviour
     {
         //custom
         if(name == "Squatch_") {return rainbow(name);}
+        if(name == "Chikenǃ") {return $"<color=#6c9fce>{name}</color>";}
+        if(name == "Kat-") {return $"<color=#fdb8d1>{name}</color>";}
+        if(name == "~Can~") {return $"<color=#e681e5>{name}</color>";}
+        if(name == "~Hayashi~") {return $"<color=#3c8f43>{name}</color>";}
         //------
 
         if (table.nameColorHook == null) return $"<color=#ffffff>{name}</color>";

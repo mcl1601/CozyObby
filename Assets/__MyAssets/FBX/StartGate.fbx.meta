@@ -31,7 +31,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties:
-    - '#BAKERY{"meshName":["CheckpointGate.002"],"padding":[27],"unwrapper":[1]}'
+    - '#BAKERY{"meshName":["CheckpointGate.002"],"padding":[20],"unwrapper":[1]}'
     clipAnimations: []
     isReadable: 0
   meshes:

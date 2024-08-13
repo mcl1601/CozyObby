@@ -268,6 +268,13 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 		_AudioLinkEmission0CenterOutSize ("Intensity Threshold--{ condition_showS:(_EmissionAL0Enabled==1 && _EnableAudioLink==1)}", Range(0, 1)) = 0
 		[Enum(Bass, 0, Low Mid, 1, High Mid, 2, Treble, 3)] _AudioLinkEmission0CenterOutBand ("Center Out Band--{ condition_showS:(_EmissionAL0Enabled==1 && _EnableAudioLink==1)}", Int) = 0
 		[HideInInspector] m_end_emissionOptions ("", Float) = 0
+		//ifex _EnableAudioLink==0
+		[HideInInspector] m_AudioLinkCategory (" Audio Link--{reference_property:_EnableAudioLink}", Float) = 0
+		[HideInInspector] m_start_audioLink ("Audio Link", Float) = 0
+		[HideInInspector][ThryToggle(POI_AUDIOLINK)] _EnableAudioLink ("Enabled?", Float) = 0
+		[Helpbox(1)] _AudioLinkHelp ("This section houses the global controls for audio link. Controls for individual features are in their respective sections. (Emission, Dissolve, etc...)", Int) = 0
+		[ToggleUI] _AudioLinkAnimToggle ("Anim Toggle", Float) = 1
+		[HideInInspector] m_end_audioLink ("Audio Link", Float) = 0
 		[HideInInspector] m_modifierCategory ("Modifiers", Float) = 0
 		[HideInInspector] m_start_uvPanosphere ("Panosphere UV", Float) = 0
 		[ToggleUI] _StereoEnabled ("Stereo Enabled", Float) = 0
@@ -362,6 +369,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			Blend [_SrcBlend] [_DstBlend]
 			CGPROGRAM
  #define OPTIMIZER_ENABLED 
+ #define POI_AUDIOLINK 
  #define POI_LIGHT_DATA_ADDITIVE_DIRECTIONAL_ENABLE 
  #define POI_LIGHT_DATA_ADDITIVE_ENABLE 
  #define POI_VERTEXLIGHT_ON 
@@ -370,6 +378,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
  #define _LIGHTINGMODE_REALISTIC 
  #define PROP_EMISSIONMAP 
 			#pragma target 5.0
+			//ifex float(1)==0
 			//ifex float(1)==0
 			//ifex float(1)==0
 			#pragma multi_compile_fwdbase
@@ -415,6 +424,76 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			#define POI_MODE_MULTIPLICATIVE 6
 			#define POI_MODE_2XMULTIPLICATIVE 7
 			#define POI_MODE_TRANSCLIPPING 9
+			//ifex float(1)==0
+			#define ALPASS_DFT                      uint2(0,4)   //Size: 128, 2
+			#define ALPASS_WAVEFORM                 uint2(0,6)   //Size: 128, 16
+			#define ALPASS_AUDIOLINK                uint2(0,0)   //Size: 128, 4
+			#define ALPASS_AUDIOBASS                uint2(0,0)   //Size: 128, 1
+			#define ALPASS_AUDIOLOWMIDS             uint2(0,1)   //Size: 128, 1
+			#define ALPASS_AUDIOHIGHMIDS            uint2(0,2)   //Size: 128, 1
+			#define ALPASS_AUDIOTREBLE              uint2(0,3)   //Size: 128, 1
+			#define ALPASS_AUDIOLINKHISTORY         uint2(1,0)   //Size: 127, 4
+			#define ALPASS_GENERALVU                uint2(0,22)  //Size: 12, 1
+			#define ALPASS_CCINTERNAL               uint2(12,22) //Size: 12, 2
+			#define ALPASS_CCCOLORS                 uint2(25,22) //Size: 11, 1
+			#define ALPASS_CCSTRIP                  uint2(0,24)  //Size: 128, 1
+			#define ALPASS_CCLIGHTS                 uint2(0,25)  //Size: 128, 2
+			#define ALPASS_AUTOCORRELATOR           uint2(0,27)  //Size: 128, 1
+			#define ALPASS_GENERALVU_INSTANCE_TIME  uint2(2,22)
+			#define ALPASS_GENERALVU_LOCAL_TIME     uint2(3,22)
+			#define ALPASS_GENERALVU_NETWORK_TIME   uint2(4,22)
+			#define ALPASS_GENERALVU_PLAYERINFO     uint2(6,22)
+			#define ALPASS_FILTEREDAUDIOLINK        uint2(0,28)  //Size: 16, 4
+			#define ALPASS_CHRONOTENSITY            uint2(16,28) //Size: 8, 4
+			#define ALPASS_THEME_COLOR0             uint2(0,23)
+			#define ALPASS_THEME_COLOR1             uint2(1,23)
+			#define ALPASS_THEME_COLOR2             uint2(2,23)
+			#define ALPASS_THEME_COLOR3             uint2(3,23)
+			#define ALPASS_FILTEREDVU               uint2(24,28) //Size: 4, 4
+			#define ALPASS_FILTEREDVU_INTENSITY     uint2(24,28) //Size: 4, 1
+			#define ALPASS_FILTEREDVU_MARKER        uint2(24,29) //Size: 4, 1
+			#define AUDIOLINK_SAMPHIST              3069        // Internal use for algos, do not change.
+			#define AUDIOLINK_SAMPLEDATA24          2046
+			#define AUDIOLINK_EXPBINS               24
+			#define AUDIOLINK_EXPOCT                10
+			#define AUDIOLINK_ETOTALBINS (AUDIOLINK_EXPBINS * AUDIOLINK_EXPOCT)
+			#define AUDIOLINK_WIDTH                 128
+			#define AUDIOLINK_SPS                   48000       // Samples per second
+			#define AUDIOLINK_ROOTNOTE              0
+			#define AUDIOLINK_4BAND_FREQFLOOR       0.123
+			#define AUDIOLINK_4BAND_FREQCEILING     1
+			#define AUDIOLINK_BOTTOM_FREQUENCY      13.75
+			#define AUDIOLINK_BASE_AMPLITUDE        2.5
+			#define AUDIOLINK_DELAY_COEFFICIENT_MIN 0.3
+			#define AUDIOLINK_DELAY_COEFFICIENT_MAX 0.9
+			#define AUDIOLINK_DFT_Q                 4.0
+			#define AUDIOLINK_TREBLE_CORRECTION     5.0
+			#define COLORCHORD_EMAXBIN              192
+			#define COLORCHORD_IIR_DECAY_1          0.90
+			#define COLORCHORD_IIR_DECAY_2          0.85
+			#define COLORCHORD_CONSTANT_DECAY_1     0.01
+			#define COLORCHORD_CONSTANT_DECAY_2     0.0
+			#define COLORCHORD_NOTE_CLOSEST         3.0
+			#define COLORCHORD_NEW_NOTE_GAIN        8.0
+			#define COLORCHORD_MAX_NOTES            10
+			#ifndef glsl_mod
+			#define glsl_mod(x, y) (((x) - (y) * floor((x) / (y))))
+			#endif
+			uniform float4               _AudioTexture_TexelSize;
+			#ifdef SHADER_TARGET_SURFACE_ANALYSIS
+			#define AUDIOLINK_STANDARD_INDEXING
+			#endif
+			#ifdef AUDIOLINK_STANDARD_INDEXING
+			sampler2D _AudioTexture;
+			#define AudioLinkData(xycoord) tex2Dlod(_AudioTexture, float4(uint2(xycoord) * _AudioTexture_TexelSize.xy, 0, 0))
+			#else
+			uniform Texture2D<float4> _AudioTexture;
+			SamplerState sampler_AudioTexture;
+			#define AudioLinkData(xycoord) _AudioTexture[uint2(xycoord)]
+			#endif
+			uniform sampler2D _Stored;
+			uniform float4 _Stored_TexelSize;
+			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			float _Mode;
 			float4 _GlobalThemeColor0;
 			float4 _GlobalThemeColor1;
@@ -427,6 +506,23 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			float _PolarLengthScale;
 			float _PolarSpiralPower;
 			float _PanoUseBothEyes;
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float _AudioLinkDelay;
+			float _AudioLinkAnimToggle;
+			float _DebugWaveform;
+			float _DebugDFT;
+			float _DebugBass;
+			float _DebugLowMids;
+			float _DebugHighMids;
+			float _DebugTreble;
+			float _DebugCCColors;
+			float _DebugCCStrip;
+			float _DebugCCLights;
+			float _DebugAutocorrelator;
+			float _DebugChronotensity;
+			float _AudioLinkCCStripY;
+			#endif
 			#if defined(PROP_LIGHTINGAOMAPS) || !defined(OPTIMIZER_ENABLED)
 			Texture2D _LightingAOMaps;
 			#endif
@@ -1664,6 +1760,216 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				p = (p - 0.5)*texelSize.xy;
 				return p;
 			}
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float4 AudioLinkDataMultiline(uint2 xycoord) { return AudioLinkData(uint2(xycoord.x % AUDIOLINK_WIDTH, xycoord.y + xycoord.x/AUDIOLINK_WIDTH)); }
+			float4 AudioLinkLerp(float2 xy) { return lerp( AudioLinkData(xy), AudioLinkData(xy+int2(1,0)), frac( xy.x ) ); }
+			float4 AudioLinkLerpMultiline(float2 xy) { return lerp(AudioLinkDataMultiline(xy), AudioLinkDataMultiline(xy+float2(1,0)), frac(xy.x)); }
+			bool AudioLinkIsAvailable()
+			{
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				int width, height;
+				_AudioTexture.GetDimensions(width, height);
+				return width > 16;
+				#else
+				return _AudioTexture_TexelSize.z > 16;
+				#endif
+			}
+			float AudioLinkGetVersion()
+			{
+				int2 dims;
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				_AudioTexture.GetDimensions(dims.x, dims.y);
+				#else
+				dims = _AudioTexture_TexelSize.zw;
+				#endif
+				if (dims.x >= 128)
+				return AudioLinkData(ALPASS_GENERALVU).x;
+				else if (dims.x > 16)
+				return 1;
+				else
+				return 0;
+			}
+			#define AudioLinkGetSelfPixelData(xy) _SelfTexture2D[xy]
+			uint AudioLinkDecodeDataAsUInt(uint2 indexloc)
+			{
+				uint4 rpx = AudioLinkData(indexloc);
+				return rpx.r + rpx.g*1024 + rpx.b * 1048576 + rpx.a * 1073741824;
+			}
+			float AudioLinkDecodeDataAsSeconds(uint2 indexloc)
+			{
+				uint time = AudioLinkDecodeDataAsUInt(indexloc) & 0x7ffffff;
+				return float(time / 1000) + float( time % 1000 ) / 1000.;
+			}
+			#define ALDecodeDataAsSeconds( x ) AudioLinkDecodeDataAsSeconds( x )
+			#define ALDecodeDataAsUInt( x ) AudioLinkDecodeDataAsUInt( x )
+			float AudioLinkRemap(float t, float a, float b, float u, float v) { return ((t-a) / (b-a)) * (v-u) + u; }
+			float3 AudioLinkHSVtoRGB(float3 HSV)
+			{
+				float3 RGB = 0;
+				float C = HSV.z * HSV.y;
+				float H = HSV.x * 6;
+				float X = C * (1 - abs(fmod(H, 2) - 1));
+				if (HSV.y != 0)
+				{
+					float I = floor(H);
+					if (I == 0) { RGB = float3(C, X, 0); }
+					else if (I == 1) { RGB = float3(X, C, 0); }
+					else if (I == 2) { RGB = float3(0, C, X); }
+					else if (I == 3) { RGB = float3(0, X, C); }
+					else if (I == 4) { RGB = float3(X, 0, C); }
+					else { RGB = float3(C, 0, X); }
+				}
+				float M = HSV.z - C;
+				return RGB + M;
+			}
+			float3 AudioLinkCCtoRGB(float bin, float intensity, int rootNote)
+			{
+				float note = bin / AUDIOLINK_EXPBINS;
+				float hue = 0.0;
+				note *= 12.0;
+				note = glsl_mod(4. - note + rootNote, 12.0);
+				{
+					if(note < 4.0)
+					{
+						hue = (note) / 24.0;
+					}
+					else if(note < 8.0)
+					{
+						hue = (note-2.0) / 12.0;
+					}
+					else
+					{
+						hue = (note - 4.0) / 8.0;
+					}
+				}
+				float val = intensity - 0.1;
+				return AudioLinkHSVtoRGB(float3(fmod(hue, 1.0), 1.0, clamp(val, 0.0, 1.0)));
+			}
+			float4 AudioLinkGetAmplitudeAtFrequency(float hertz)
+			{
+				float note = AUDIOLINK_EXPBINS * log2(hertz / AUDIOLINK_BOTTOM_FREQUENCY);
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(note, 0));
+			}
+			float AudioLinkGetAmplitudeAtNote(float octave, float note)
+			{
+				float quarter = note * 2.0;
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(octave * AUDIOLINK_EXPBINS + quarter, 0));
+			}
+			float AudioLinkGetChronoTime(uint index, uint band)
+			{
+				return (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY + uint2(index, band))) / 100000.0;
+			}
+			float AudioLinkGetChronoTimeNormalized(uint index, uint band, float speed)
+			{
+				return frac(AudioLinkGetChronoTime(index, band) * speed);
+			}
+			float AudioLinkGetChronoTimeInterval(uint index, uint band, float speed, float interval)
+			{
+				return AudioLinkGetChronoTimeNormalized(index, band, speed) * interval;
+			}
+			float getBandAtTime(float band, float time, float size = 1.0f)
+			{
+				return remapClamped(min(size,.9999), 1, AudioLinkData(ALPASS_AUDIOBASS + uint2(time * AUDIOLINK_WIDTH,band)).r);
+			}
+			fixed3 maximize(fixed3 c) {
+				if (c.x == 0 && c.y == 0 && c.z == 0)
+				return fixed3(1.0, 1.0, 1.0);
+				else
+				return c / max(c.r, max(c.g, c.b));
+			}
+			bool LumaIsAvailable()
+			{
+				return LumaData(0.629, 0.511).r > 0.9;
+			}
+			float3 getLumaGradient(uint index, float offset) {
+				return LumaData(0.57 + (index * 0.11) + lerp(0, 0.107, offset), 0.493);
+			}
+			void initPoiAudioLink(inout PoiMods poiMods)
+			{
+				if (!float(1)) return;
+				if (AudioLinkIsAvailable())
+				{
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkVersion = AudioLinkGetVersion();
+					poiMods.audioLink.x = AudioLinkData(ALPASS_AUDIOBASS).r;
+					poiMods.audioLink.y = AudioLinkData(ALPASS_AUDIOLOWMIDS).r;
+					poiMods.audioLink.z = AudioLinkData(ALPASS_AUDIOHIGHMIDS).r;
+					poiMods.audioLink.w = AudioLinkData(ALPASS_AUDIOTREBLE).r;
+					poiMods.globalColorTheme[4] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(2, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[5] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(3, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[6] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(4, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[7] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(5, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[8] = AudioLinkData(ALPASS_THEME_COLOR0);
+					poiMods.globalColorTheme[9] = AudioLinkData(ALPASS_THEME_COLOR1);
+					poiMods.globalColorTheme[10] = AudioLinkData(ALPASS_THEME_COLOR2);
+					poiMods.globalColorTheme[11] = AudioLinkData(ALPASS_THEME_COLOR3);
+					return;
+				}
+				if (LumaIsAvailable())
+				{
+					float4 audioPixel = LumaData(0.578, 0.515);
+					float audioLows = audioPixel.r;
+					float audioHighs = audioPixel.g;
+					float4 zone1 = LumaData(0.856, 0.522);
+					float4 zone2 = LumaData(0.856, 0.507);
+					float4 zone3 = LumaData(0.864, 0.522);
+					float4 zone4 = LumaData(0.864, 0.507);
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkViaLuma = true;
+					poiMods.audioLink.xy = audioLows;
+					poiMods.audioLink.zw = audioHighs;
+					poiMods.globalColorTheme[8] = zone1;
+					poiMods.globalColorTheme[9] = zone2;
+					poiMods.globalColorTheme[10] = zone3;
+					poiMods.globalColorTheme[11] = zone4;
+				}
+			}
+			void DebugVisualizer(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiMods poiMods){
+				if (_DebugWaveform){
+					float waveform = AudioLinkLerpMultiline(ALPASS_WAVEFORM + float2( 500. * poiMesh.uv[0].x, 0)).r;
+					poiFragData.emission += clamp(1 - 50 * abs(waveform - poiMesh.uv[0].y * 2. + 1), 0, 1);
+				}
+				if (_DebugDFT){
+					poiFragData.emission += AudioLinkLerpMultiline(ALPASS_DFT + uint2(poiMesh.uv[0].x * AUDIOLINK_ETOTALBINS, 0)).rrr;
+				}
+				if (_DebugBass){
+					poiFragData.emission += poiMods.audioLink.x;
+				}
+				if (_DebugLowMids){
+					poiFragData.emission += poiMods.audioLink.y;
+				}
+				if (_DebugHighMids){
+					poiFragData.emission += poiMods.audioLink.z;
+				}
+				if (_DebugTreble){
+					poiFragData.emission += poiMods.audioLink.w;
+				}
+				if (_DebugCCColors){
+					poiFragData.emission += AudioLinkData(ALPASS_CCCOLORS + uint2(3 + 1, 0));
+				}
+				if (_DebugCCStrip){
+					poiFragData.emission += AudioLinkLerp(ALPASS_CCSTRIP + float2(poiMesh.uv[0].x * AUDIOLINK_WIDTH, 0));
+				}
+				if (_DebugCCLights){
+					poiFragData.emission += AudioLinkData(ALPASS_CCLIGHTS + uint2(uint(poiMesh.uv[0].x * 8) + uint(poiMesh.uv[0].y * 16) * 8, 0));
+				}
+				if (_DebugAutocorrelator){
+					poiFragData.emission += saturate(AudioLinkLerp(ALPASS_AUTOCORRELATOR + float2((abs(1. - poiMesh.uv[0].x * 2.)) * AUDIOLINK_WIDTH, 0)).rrr);
+				}
+				if (_DebugChronotensity){
+					poiFragData.emission += (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY  + uint2(1, 0)) % 1000000) / 1000000.0;
+				}
+			}
+			void SetupAudioLink(inout PoiFragData poiFragData, inout PoiMods poiMods, in PoiMesh poiMesh){
+				initPoiAudioLink(poiMods);
+				DebugVisualizer(poiFragData, poiMesh, poiMods);
+				if(_AudioLinkCCStripY)
+				{
+					poiFragData.emission += AudioLinkLerp( ALPASS_CCSTRIP + float2( poiMesh.uv[0].y * AUDIOLINK_WIDTH, 0 ) ).rgb * .5;
+				}
+			}
+			#endif
 			v2f vert(appdata v)
 			{
 				UNITY_SETUP_INSTANCE_ID(v);
@@ -2489,8 +2795,8 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 					emissionMask0 *= blackLightMask[_BlackLightMaskEmission];
 				}
 				#endif
-				applyALEmmissionStrength(poiMods, emissionStrength0, float4(0,0,0,0), float(0), float4(1,1,0,0), float(0), float(0));
-				applyALCenterOutEmission(poiMods, poiLight.nDotV, emissionStrength0, float(0), float(0), float4(0,0,0,0), float(0));
+				applyALEmmissionStrength(poiMods, emissionStrength0, float4(0,0.5,0,0), float(2), float4(1,2,0,0), float(0), float(1));
+				applyALCenterOutEmission(poiMods, poiLight.nDotV, emissionStrength0, float(0), float(2), float4(0,0,0,0), float(1));
 				emissionStrength0 *= glowInTheDarkMultiplier0 * emissionMask0;
 				emission0 = max(emissionStrength0 * emissionColor0, 0);
 				#ifdef POI_DISSOLVE
@@ -2593,6 +2899,10 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				poiCam.clipPos = i.pos;
 				poiCam.worldDirection = i.worldDirection;
 				calculateGlobalThemes(poiMods);
+				//ifex float(1)==0
+				#ifdef POI_AUDIOLINK
+				SetupAudioLink(poiFragData, poiMods, poiMesh);
+				#endif
 				poiLight.finalLightAdd = 0;
 				#if defined(PROP_LIGHTINGAOMAPS) || !defined(OPTIMIZER_ENABLED)
 				float4 AOMaps = POI2D_SAMPLER_PAN(_LightingAOMaps, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)), float4(0,0,0,0));
@@ -2959,6 +3269,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			Blend [_AddSrcBlend] [_AddDstBlend]
 			CGPROGRAM
  #define OPTIMIZER_ENABLED 
+ #define POI_AUDIOLINK 
  #define POI_LIGHT_DATA_ADDITIVE_DIRECTIONAL_ENABLE 
  #define POI_LIGHT_DATA_ADDITIVE_ENABLE 
  #define POI_VERTEXLIGHT_ON 
@@ -2967,6 +3278,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
  #define _LIGHTINGMODE_REALISTIC 
  #define PROP_EMISSIONMAP 
 			#pragma target 5.0
+			//ifex float(1)==0
 			//ifex float(1)==0
 			//ifex float(1)==0
 			#pragma multi_compile_fwdadd_fullshadows
@@ -3011,6 +3323,76 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			#define POI_MODE_MULTIPLICATIVE 6
 			#define POI_MODE_2XMULTIPLICATIVE 7
 			#define POI_MODE_TRANSCLIPPING 9
+			//ifex float(1)==0
+			#define ALPASS_DFT                      uint2(0,4)   //Size: 128, 2
+			#define ALPASS_WAVEFORM                 uint2(0,6)   //Size: 128, 16
+			#define ALPASS_AUDIOLINK                uint2(0,0)   //Size: 128, 4
+			#define ALPASS_AUDIOBASS                uint2(0,0)   //Size: 128, 1
+			#define ALPASS_AUDIOLOWMIDS             uint2(0,1)   //Size: 128, 1
+			#define ALPASS_AUDIOHIGHMIDS            uint2(0,2)   //Size: 128, 1
+			#define ALPASS_AUDIOTREBLE              uint2(0,3)   //Size: 128, 1
+			#define ALPASS_AUDIOLINKHISTORY         uint2(1,0)   //Size: 127, 4
+			#define ALPASS_GENERALVU                uint2(0,22)  //Size: 12, 1
+			#define ALPASS_CCINTERNAL               uint2(12,22) //Size: 12, 2
+			#define ALPASS_CCCOLORS                 uint2(25,22) //Size: 11, 1
+			#define ALPASS_CCSTRIP                  uint2(0,24)  //Size: 128, 1
+			#define ALPASS_CCLIGHTS                 uint2(0,25)  //Size: 128, 2
+			#define ALPASS_AUTOCORRELATOR           uint2(0,27)  //Size: 128, 1
+			#define ALPASS_GENERALVU_INSTANCE_TIME  uint2(2,22)
+			#define ALPASS_GENERALVU_LOCAL_TIME     uint2(3,22)
+			#define ALPASS_GENERALVU_NETWORK_TIME   uint2(4,22)
+			#define ALPASS_GENERALVU_PLAYERINFO     uint2(6,22)
+			#define ALPASS_FILTEREDAUDIOLINK        uint2(0,28)  //Size: 16, 4
+			#define ALPASS_CHRONOTENSITY            uint2(16,28) //Size: 8, 4
+			#define ALPASS_THEME_COLOR0             uint2(0,23)
+			#define ALPASS_THEME_COLOR1             uint2(1,23)
+			#define ALPASS_THEME_COLOR2             uint2(2,23)
+			#define ALPASS_THEME_COLOR3             uint2(3,23)
+			#define ALPASS_FILTEREDVU               uint2(24,28) //Size: 4, 4
+			#define ALPASS_FILTEREDVU_INTENSITY     uint2(24,28) //Size: 4, 1
+			#define ALPASS_FILTEREDVU_MARKER        uint2(24,29) //Size: 4, 1
+			#define AUDIOLINK_SAMPHIST              3069        // Internal use for algos, do not change.
+			#define AUDIOLINK_SAMPLEDATA24          2046
+			#define AUDIOLINK_EXPBINS               24
+			#define AUDIOLINK_EXPOCT                10
+			#define AUDIOLINK_ETOTALBINS (AUDIOLINK_EXPBINS * AUDIOLINK_EXPOCT)
+			#define AUDIOLINK_WIDTH                 128
+			#define AUDIOLINK_SPS                   48000       // Samples per second
+			#define AUDIOLINK_ROOTNOTE              0
+			#define AUDIOLINK_4BAND_FREQFLOOR       0.123
+			#define AUDIOLINK_4BAND_FREQCEILING     1
+			#define AUDIOLINK_BOTTOM_FREQUENCY      13.75
+			#define AUDIOLINK_BASE_AMPLITUDE        2.5
+			#define AUDIOLINK_DELAY_COEFFICIENT_MIN 0.3
+			#define AUDIOLINK_DELAY_COEFFICIENT_MAX 0.9
+			#define AUDIOLINK_DFT_Q                 4.0
+			#define AUDIOLINK_TREBLE_CORRECTION     5.0
+			#define COLORCHORD_EMAXBIN              192
+			#define COLORCHORD_IIR_DECAY_1          0.90
+			#define COLORCHORD_IIR_DECAY_2          0.85
+			#define COLORCHORD_CONSTANT_DECAY_1     0.01
+			#define COLORCHORD_CONSTANT_DECAY_2     0.0
+			#define COLORCHORD_NOTE_CLOSEST         3.0
+			#define COLORCHORD_NEW_NOTE_GAIN        8.0
+			#define COLORCHORD_MAX_NOTES            10
+			#ifndef glsl_mod
+			#define glsl_mod(x, y) (((x) - (y) * floor((x) / (y))))
+			#endif
+			uniform float4               _AudioTexture_TexelSize;
+			#ifdef SHADER_TARGET_SURFACE_ANALYSIS
+			#define AUDIOLINK_STANDARD_INDEXING
+			#endif
+			#ifdef AUDIOLINK_STANDARD_INDEXING
+			sampler2D _AudioTexture;
+			#define AudioLinkData(xycoord) tex2Dlod(_AudioTexture, float4(uint2(xycoord) * _AudioTexture_TexelSize.xy, 0, 0))
+			#else
+			uniform Texture2D<float4> _AudioTexture;
+			SamplerState sampler_AudioTexture;
+			#define AudioLinkData(xycoord) _AudioTexture[uint2(xycoord)]
+			#endif
+			uniform sampler2D _Stored;
+			uniform float4 _Stored_TexelSize;
+			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			float _Mode;
 			float4 _GlobalThemeColor0;
 			float4 _GlobalThemeColor1;
@@ -3023,6 +3405,23 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			float _PolarLengthScale;
 			float _PolarSpiralPower;
 			float _PanoUseBothEyes;
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float _AudioLinkDelay;
+			float _AudioLinkAnimToggle;
+			float _DebugWaveform;
+			float _DebugDFT;
+			float _DebugBass;
+			float _DebugLowMids;
+			float _DebugHighMids;
+			float _DebugTreble;
+			float _DebugCCColors;
+			float _DebugCCStrip;
+			float _DebugCCLights;
+			float _DebugAutocorrelator;
+			float _DebugChronotensity;
+			float _AudioLinkCCStripY;
+			#endif
 			#if defined(PROP_LIGHTINGAOMAPS) || !defined(OPTIMIZER_ENABLED)
 			Texture2D _LightingAOMaps;
 			#endif
@@ -4199,6 +4598,216 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				p = (p - 0.5)*texelSize.xy;
 				return p;
 			}
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float4 AudioLinkDataMultiline(uint2 xycoord) { return AudioLinkData(uint2(xycoord.x % AUDIOLINK_WIDTH, xycoord.y + xycoord.x/AUDIOLINK_WIDTH)); }
+			float4 AudioLinkLerp(float2 xy) { return lerp( AudioLinkData(xy), AudioLinkData(xy+int2(1,0)), frac( xy.x ) ); }
+			float4 AudioLinkLerpMultiline(float2 xy) { return lerp(AudioLinkDataMultiline(xy), AudioLinkDataMultiline(xy+float2(1,0)), frac(xy.x)); }
+			bool AudioLinkIsAvailable()
+			{
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				int width, height;
+				_AudioTexture.GetDimensions(width, height);
+				return width > 16;
+				#else
+				return _AudioTexture_TexelSize.z > 16;
+				#endif
+			}
+			float AudioLinkGetVersion()
+			{
+				int2 dims;
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				_AudioTexture.GetDimensions(dims.x, dims.y);
+				#else
+				dims = _AudioTexture_TexelSize.zw;
+				#endif
+				if (dims.x >= 128)
+				return AudioLinkData(ALPASS_GENERALVU).x;
+				else if (dims.x > 16)
+				return 1;
+				else
+				return 0;
+			}
+			#define AudioLinkGetSelfPixelData(xy) _SelfTexture2D[xy]
+			uint AudioLinkDecodeDataAsUInt(uint2 indexloc)
+			{
+				uint4 rpx = AudioLinkData(indexloc);
+				return rpx.r + rpx.g*1024 + rpx.b * 1048576 + rpx.a * 1073741824;
+			}
+			float AudioLinkDecodeDataAsSeconds(uint2 indexloc)
+			{
+				uint time = AudioLinkDecodeDataAsUInt(indexloc) & 0x7ffffff;
+				return float(time / 1000) + float( time % 1000 ) / 1000.;
+			}
+			#define ALDecodeDataAsSeconds( x ) AudioLinkDecodeDataAsSeconds( x )
+			#define ALDecodeDataAsUInt( x ) AudioLinkDecodeDataAsUInt( x )
+			float AudioLinkRemap(float t, float a, float b, float u, float v) { return ((t-a) / (b-a)) * (v-u) + u; }
+			float3 AudioLinkHSVtoRGB(float3 HSV)
+			{
+				float3 RGB = 0;
+				float C = HSV.z * HSV.y;
+				float H = HSV.x * 6;
+				float X = C * (1 - abs(fmod(H, 2) - 1));
+				if (HSV.y != 0)
+				{
+					float I = floor(H);
+					if (I == 0) { RGB = float3(C, X, 0); }
+					else if (I == 1) { RGB = float3(X, C, 0); }
+					else if (I == 2) { RGB = float3(0, C, X); }
+					else if (I == 3) { RGB = float3(0, X, C); }
+					else if (I == 4) { RGB = float3(X, 0, C); }
+					else { RGB = float3(C, 0, X); }
+				}
+				float M = HSV.z - C;
+				return RGB + M;
+			}
+			float3 AudioLinkCCtoRGB(float bin, float intensity, int rootNote)
+			{
+				float note = bin / AUDIOLINK_EXPBINS;
+				float hue = 0.0;
+				note *= 12.0;
+				note = glsl_mod(4. - note + rootNote, 12.0);
+				{
+					if(note < 4.0)
+					{
+						hue = (note) / 24.0;
+					}
+					else if(note < 8.0)
+					{
+						hue = (note-2.0) / 12.0;
+					}
+					else
+					{
+						hue = (note - 4.0) / 8.0;
+					}
+				}
+				float val = intensity - 0.1;
+				return AudioLinkHSVtoRGB(float3(fmod(hue, 1.0), 1.0, clamp(val, 0.0, 1.0)));
+			}
+			float4 AudioLinkGetAmplitudeAtFrequency(float hertz)
+			{
+				float note = AUDIOLINK_EXPBINS * log2(hertz / AUDIOLINK_BOTTOM_FREQUENCY);
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(note, 0));
+			}
+			float AudioLinkGetAmplitudeAtNote(float octave, float note)
+			{
+				float quarter = note * 2.0;
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(octave * AUDIOLINK_EXPBINS + quarter, 0));
+			}
+			float AudioLinkGetChronoTime(uint index, uint band)
+			{
+				return (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY + uint2(index, band))) / 100000.0;
+			}
+			float AudioLinkGetChronoTimeNormalized(uint index, uint band, float speed)
+			{
+				return frac(AudioLinkGetChronoTime(index, band) * speed);
+			}
+			float AudioLinkGetChronoTimeInterval(uint index, uint band, float speed, float interval)
+			{
+				return AudioLinkGetChronoTimeNormalized(index, band, speed) * interval;
+			}
+			float getBandAtTime(float band, float time, float size = 1.0f)
+			{
+				return remapClamped(min(size,.9999), 1, AudioLinkData(ALPASS_AUDIOBASS + uint2(time * AUDIOLINK_WIDTH,band)).r);
+			}
+			fixed3 maximize(fixed3 c) {
+				if (c.x == 0 && c.y == 0 && c.z == 0)
+				return fixed3(1.0, 1.0, 1.0);
+				else
+				return c / max(c.r, max(c.g, c.b));
+			}
+			bool LumaIsAvailable()
+			{
+				return LumaData(0.629, 0.511).r > 0.9;
+			}
+			float3 getLumaGradient(uint index, float offset) {
+				return LumaData(0.57 + (index * 0.11) + lerp(0, 0.107, offset), 0.493);
+			}
+			void initPoiAudioLink(inout PoiMods poiMods)
+			{
+				if (!float(1)) return;
+				if (AudioLinkIsAvailable())
+				{
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkVersion = AudioLinkGetVersion();
+					poiMods.audioLink.x = AudioLinkData(ALPASS_AUDIOBASS).r;
+					poiMods.audioLink.y = AudioLinkData(ALPASS_AUDIOLOWMIDS).r;
+					poiMods.audioLink.z = AudioLinkData(ALPASS_AUDIOHIGHMIDS).r;
+					poiMods.audioLink.w = AudioLinkData(ALPASS_AUDIOTREBLE).r;
+					poiMods.globalColorTheme[4] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(2, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[5] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(3, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[6] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(4, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[7] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(5, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[8] = AudioLinkData(ALPASS_THEME_COLOR0);
+					poiMods.globalColorTheme[9] = AudioLinkData(ALPASS_THEME_COLOR1);
+					poiMods.globalColorTheme[10] = AudioLinkData(ALPASS_THEME_COLOR2);
+					poiMods.globalColorTheme[11] = AudioLinkData(ALPASS_THEME_COLOR3);
+					return;
+				}
+				if (LumaIsAvailable())
+				{
+					float4 audioPixel = LumaData(0.578, 0.515);
+					float audioLows = audioPixel.r;
+					float audioHighs = audioPixel.g;
+					float4 zone1 = LumaData(0.856, 0.522);
+					float4 zone2 = LumaData(0.856, 0.507);
+					float4 zone3 = LumaData(0.864, 0.522);
+					float4 zone4 = LumaData(0.864, 0.507);
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkViaLuma = true;
+					poiMods.audioLink.xy = audioLows;
+					poiMods.audioLink.zw = audioHighs;
+					poiMods.globalColorTheme[8] = zone1;
+					poiMods.globalColorTheme[9] = zone2;
+					poiMods.globalColorTheme[10] = zone3;
+					poiMods.globalColorTheme[11] = zone4;
+				}
+			}
+			void DebugVisualizer(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiMods poiMods){
+				if (_DebugWaveform){
+					float waveform = AudioLinkLerpMultiline(ALPASS_WAVEFORM + float2( 500. * poiMesh.uv[0].x, 0)).r;
+					poiFragData.emission += clamp(1 - 50 * abs(waveform - poiMesh.uv[0].y * 2. + 1), 0, 1);
+				}
+				if (_DebugDFT){
+					poiFragData.emission += AudioLinkLerpMultiline(ALPASS_DFT + uint2(poiMesh.uv[0].x * AUDIOLINK_ETOTALBINS, 0)).rrr;
+				}
+				if (_DebugBass){
+					poiFragData.emission += poiMods.audioLink.x;
+				}
+				if (_DebugLowMids){
+					poiFragData.emission += poiMods.audioLink.y;
+				}
+				if (_DebugHighMids){
+					poiFragData.emission += poiMods.audioLink.z;
+				}
+				if (_DebugTreble){
+					poiFragData.emission += poiMods.audioLink.w;
+				}
+				if (_DebugCCColors){
+					poiFragData.emission += AudioLinkData(ALPASS_CCCOLORS + uint2(3 + 1, 0));
+				}
+				if (_DebugCCStrip){
+					poiFragData.emission += AudioLinkLerp(ALPASS_CCSTRIP + float2(poiMesh.uv[0].x * AUDIOLINK_WIDTH, 0));
+				}
+				if (_DebugCCLights){
+					poiFragData.emission += AudioLinkData(ALPASS_CCLIGHTS + uint2(uint(poiMesh.uv[0].x * 8) + uint(poiMesh.uv[0].y * 16) * 8, 0));
+				}
+				if (_DebugAutocorrelator){
+					poiFragData.emission += saturate(AudioLinkLerp(ALPASS_AUTOCORRELATOR + float2((abs(1. - poiMesh.uv[0].x * 2.)) * AUDIOLINK_WIDTH, 0)).rrr);
+				}
+				if (_DebugChronotensity){
+					poiFragData.emission += (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY  + uint2(1, 0)) % 1000000) / 1000000.0;
+				}
+			}
+			void SetupAudioLink(inout PoiFragData poiFragData, inout PoiMods poiMods, in PoiMesh poiMesh){
+				initPoiAudioLink(poiMods);
+				DebugVisualizer(poiFragData, poiMesh, poiMods);
+				if(_AudioLinkCCStripY)
+				{
+					poiFragData.emission += AudioLinkLerp( ALPASS_CCSTRIP + float2( poiMesh.uv[0].y * AUDIOLINK_WIDTH, 0 ) ).rgb * .5;
+				}
+			}
+			#endif
 			v2f vert(appdata v)
 			{
 				UNITY_SETUP_INSTANCE_ID(v);
@@ -4998,6 +5607,10 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				poiCam.clipPos = i.pos;
 				poiCam.worldDirection = i.worldDirection;
 				calculateGlobalThemes(poiMods);
+				//ifex float(1)==0
+				#ifdef POI_AUDIOLINK
+				SetupAudioLink(poiFragData, poiMods, poiMesh);
+				#endif
 				poiLight.finalLightAdd = 0;
 				#if defined(PROP_LIGHTINGAOMAPS) || !defined(OPTIMIZER_ENABLED)
 				float4 AOMaps = POI2D_SAMPLER_PAN(_LightingAOMaps, _MainTex, poiUV(poiMesh.uv[float(0)], float4(1,1,0,0)), float4(0,0,0,0));
@@ -5355,6 +5968,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			Blend [_SrcBlend] [_DstBlend]
 			CGPROGRAM
  #define OPTIMIZER_ENABLED 
+ #define POI_AUDIOLINK 
  #define POI_LIGHT_DATA_ADDITIVE_DIRECTIONAL_ENABLE 
  #define POI_LIGHT_DATA_ADDITIVE_ENABLE 
  #define POI_VERTEXLIGHT_ON 
@@ -5363,6 +5977,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
  #define _LIGHTINGMODE_REALISTIC 
  #define PROP_EMISSIONMAP 
 			#pragma target 5.0
+			//ifex float(1)==0
 			//ifex float(1)==0
 			//ifex float(1)==0
 			#pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
@@ -5408,6 +6023,76 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			#define POI_MODE_MULTIPLICATIVE 6
 			#define POI_MODE_2XMULTIPLICATIVE 7
 			#define POI_MODE_TRANSCLIPPING 9
+			//ifex float(1)==0
+			#define ALPASS_DFT                      uint2(0,4)   //Size: 128, 2
+			#define ALPASS_WAVEFORM                 uint2(0,6)   //Size: 128, 16
+			#define ALPASS_AUDIOLINK                uint2(0,0)   //Size: 128, 4
+			#define ALPASS_AUDIOBASS                uint2(0,0)   //Size: 128, 1
+			#define ALPASS_AUDIOLOWMIDS             uint2(0,1)   //Size: 128, 1
+			#define ALPASS_AUDIOHIGHMIDS            uint2(0,2)   //Size: 128, 1
+			#define ALPASS_AUDIOTREBLE              uint2(0,3)   //Size: 128, 1
+			#define ALPASS_AUDIOLINKHISTORY         uint2(1,0)   //Size: 127, 4
+			#define ALPASS_GENERALVU                uint2(0,22)  //Size: 12, 1
+			#define ALPASS_CCINTERNAL               uint2(12,22) //Size: 12, 2
+			#define ALPASS_CCCOLORS                 uint2(25,22) //Size: 11, 1
+			#define ALPASS_CCSTRIP                  uint2(0,24)  //Size: 128, 1
+			#define ALPASS_CCLIGHTS                 uint2(0,25)  //Size: 128, 2
+			#define ALPASS_AUTOCORRELATOR           uint2(0,27)  //Size: 128, 1
+			#define ALPASS_GENERALVU_INSTANCE_TIME  uint2(2,22)
+			#define ALPASS_GENERALVU_LOCAL_TIME     uint2(3,22)
+			#define ALPASS_GENERALVU_NETWORK_TIME   uint2(4,22)
+			#define ALPASS_GENERALVU_PLAYERINFO     uint2(6,22)
+			#define ALPASS_FILTEREDAUDIOLINK        uint2(0,28)  //Size: 16, 4
+			#define ALPASS_CHRONOTENSITY            uint2(16,28) //Size: 8, 4
+			#define ALPASS_THEME_COLOR0             uint2(0,23)
+			#define ALPASS_THEME_COLOR1             uint2(1,23)
+			#define ALPASS_THEME_COLOR2             uint2(2,23)
+			#define ALPASS_THEME_COLOR3             uint2(3,23)
+			#define ALPASS_FILTEREDVU               uint2(24,28) //Size: 4, 4
+			#define ALPASS_FILTEREDVU_INTENSITY     uint2(24,28) //Size: 4, 1
+			#define ALPASS_FILTEREDVU_MARKER        uint2(24,29) //Size: 4, 1
+			#define AUDIOLINK_SAMPHIST              3069        // Internal use for algos, do not change.
+			#define AUDIOLINK_SAMPLEDATA24          2046
+			#define AUDIOLINK_EXPBINS               24
+			#define AUDIOLINK_EXPOCT                10
+			#define AUDIOLINK_ETOTALBINS (AUDIOLINK_EXPBINS * AUDIOLINK_EXPOCT)
+			#define AUDIOLINK_WIDTH                 128
+			#define AUDIOLINK_SPS                   48000       // Samples per second
+			#define AUDIOLINK_ROOTNOTE              0
+			#define AUDIOLINK_4BAND_FREQFLOOR       0.123
+			#define AUDIOLINK_4BAND_FREQCEILING     1
+			#define AUDIOLINK_BOTTOM_FREQUENCY      13.75
+			#define AUDIOLINK_BASE_AMPLITUDE        2.5
+			#define AUDIOLINK_DELAY_COEFFICIENT_MIN 0.3
+			#define AUDIOLINK_DELAY_COEFFICIENT_MAX 0.9
+			#define AUDIOLINK_DFT_Q                 4.0
+			#define AUDIOLINK_TREBLE_CORRECTION     5.0
+			#define COLORCHORD_EMAXBIN              192
+			#define COLORCHORD_IIR_DECAY_1          0.90
+			#define COLORCHORD_IIR_DECAY_2          0.85
+			#define COLORCHORD_CONSTANT_DECAY_1     0.01
+			#define COLORCHORD_CONSTANT_DECAY_2     0.0
+			#define COLORCHORD_NOTE_CLOSEST         3.0
+			#define COLORCHORD_NEW_NOTE_GAIN        8.0
+			#define COLORCHORD_MAX_NOTES            10
+			#ifndef glsl_mod
+			#define glsl_mod(x, y) (((x) - (y) * floor((x) / (y))))
+			#endif
+			uniform float4               _AudioTexture_TexelSize;
+			#ifdef SHADER_TARGET_SURFACE_ANALYSIS
+			#define AUDIOLINK_STANDARD_INDEXING
+			#endif
+			#ifdef AUDIOLINK_STANDARD_INDEXING
+			sampler2D _AudioTexture;
+			#define AudioLinkData(xycoord) tex2Dlod(_AudioTexture, float4(uint2(xycoord) * _AudioTexture_TexelSize.xy, 0, 0))
+			#else
+			uniform Texture2D<float4> _AudioTexture;
+			SamplerState sampler_AudioTexture;
+			#define AudioLinkData(xycoord) _AudioTexture[uint2(xycoord)]
+			#endif
+			uniform sampler2D _Stored;
+			uniform float4 _Stored_TexelSize;
+			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			float _Mode;
 			float _StereoEnabled;
 			float _PolarUV;
@@ -5416,6 +6101,23 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			float _PolarLengthScale;
 			float _PolarSpiralPower;
 			float _PanoUseBothEyes;
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float _AudioLinkDelay;
+			float _AudioLinkAnimToggle;
+			float _DebugWaveform;
+			float _DebugDFT;
+			float _DebugBass;
+			float _DebugLowMids;
+			float _DebugHighMids;
+			float _DebugTreble;
+			float _DebugCCColors;
+			float _DebugCCStrip;
+			float _DebugCCLights;
+			float _DebugAutocorrelator;
+			float _DebugChronotensity;
+			float _AudioLinkCCStripY;
+			#endif
 			float _IgnoreFog;
 			float _RenderingReduceClipDistance;
 			float _AddBlendOp;
@@ -6431,6 +7133,216 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				p = (p - 0.5)*texelSize.xy;
 				return p;
 			}
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float4 AudioLinkDataMultiline(uint2 xycoord) { return AudioLinkData(uint2(xycoord.x % AUDIOLINK_WIDTH, xycoord.y + xycoord.x/AUDIOLINK_WIDTH)); }
+			float4 AudioLinkLerp(float2 xy) { return lerp( AudioLinkData(xy), AudioLinkData(xy+int2(1,0)), frac( xy.x ) ); }
+			float4 AudioLinkLerpMultiline(float2 xy) { return lerp(AudioLinkDataMultiline(xy), AudioLinkDataMultiline(xy+float2(1,0)), frac(xy.x)); }
+			bool AudioLinkIsAvailable()
+			{
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				int width, height;
+				_AudioTexture.GetDimensions(width, height);
+				return width > 16;
+				#else
+				return _AudioTexture_TexelSize.z > 16;
+				#endif
+			}
+			float AudioLinkGetVersion()
+			{
+				int2 dims;
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				_AudioTexture.GetDimensions(dims.x, dims.y);
+				#else
+				dims = _AudioTexture_TexelSize.zw;
+				#endif
+				if (dims.x >= 128)
+				return AudioLinkData(ALPASS_GENERALVU).x;
+				else if (dims.x > 16)
+				return 1;
+				else
+				return 0;
+			}
+			#define AudioLinkGetSelfPixelData(xy) _SelfTexture2D[xy]
+			uint AudioLinkDecodeDataAsUInt(uint2 indexloc)
+			{
+				uint4 rpx = AudioLinkData(indexloc);
+				return rpx.r + rpx.g*1024 + rpx.b * 1048576 + rpx.a * 1073741824;
+			}
+			float AudioLinkDecodeDataAsSeconds(uint2 indexloc)
+			{
+				uint time = AudioLinkDecodeDataAsUInt(indexloc) & 0x7ffffff;
+				return float(time / 1000) + float( time % 1000 ) / 1000.;
+			}
+			#define ALDecodeDataAsSeconds( x ) AudioLinkDecodeDataAsSeconds( x )
+			#define ALDecodeDataAsUInt( x ) AudioLinkDecodeDataAsUInt( x )
+			float AudioLinkRemap(float t, float a, float b, float u, float v) { return ((t-a) / (b-a)) * (v-u) + u; }
+			float3 AudioLinkHSVtoRGB(float3 HSV)
+			{
+				float3 RGB = 0;
+				float C = HSV.z * HSV.y;
+				float H = HSV.x * 6;
+				float X = C * (1 - abs(fmod(H, 2) - 1));
+				if (HSV.y != 0)
+				{
+					float I = floor(H);
+					if (I == 0) { RGB = float3(C, X, 0); }
+					else if (I == 1) { RGB = float3(X, C, 0); }
+					else if (I == 2) { RGB = float3(0, C, X); }
+					else if (I == 3) { RGB = float3(0, X, C); }
+					else if (I == 4) { RGB = float3(X, 0, C); }
+					else { RGB = float3(C, 0, X); }
+				}
+				float M = HSV.z - C;
+				return RGB + M;
+			}
+			float3 AudioLinkCCtoRGB(float bin, float intensity, int rootNote)
+			{
+				float note = bin / AUDIOLINK_EXPBINS;
+				float hue = 0.0;
+				note *= 12.0;
+				note = glsl_mod(4. - note + rootNote, 12.0);
+				{
+					if(note < 4.0)
+					{
+						hue = (note) / 24.0;
+					}
+					else if(note < 8.0)
+					{
+						hue = (note-2.0) / 12.0;
+					}
+					else
+					{
+						hue = (note - 4.0) / 8.0;
+					}
+				}
+				float val = intensity - 0.1;
+				return AudioLinkHSVtoRGB(float3(fmod(hue, 1.0), 1.0, clamp(val, 0.0, 1.0)));
+			}
+			float4 AudioLinkGetAmplitudeAtFrequency(float hertz)
+			{
+				float note = AUDIOLINK_EXPBINS * log2(hertz / AUDIOLINK_BOTTOM_FREQUENCY);
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(note, 0));
+			}
+			float AudioLinkGetAmplitudeAtNote(float octave, float note)
+			{
+				float quarter = note * 2.0;
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(octave * AUDIOLINK_EXPBINS + quarter, 0));
+			}
+			float AudioLinkGetChronoTime(uint index, uint band)
+			{
+				return (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY + uint2(index, band))) / 100000.0;
+			}
+			float AudioLinkGetChronoTimeNormalized(uint index, uint band, float speed)
+			{
+				return frac(AudioLinkGetChronoTime(index, band) * speed);
+			}
+			float AudioLinkGetChronoTimeInterval(uint index, uint band, float speed, float interval)
+			{
+				return AudioLinkGetChronoTimeNormalized(index, band, speed) * interval;
+			}
+			float getBandAtTime(float band, float time, float size = 1.0f)
+			{
+				return remapClamped(min(size,.9999), 1, AudioLinkData(ALPASS_AUDIOBASS + uint2(time * AUDIOLINK_WIDTH,band)).r);
+			}
+			fixed3 maximize(fixed3 c) {
+				if (c.x == 0 && c.y == 0 && c.z == 0)
+				return fixed3(1.0, 1.0, 1.0);
+				else
+				return c / max(c.r, max(c.g, c.b));
+			}
+			bool LumaIsAvailable()
+			{
+				return LumaData(0.629, 0.511).r > 0.9;
+			}
+			float3 getLumaGradient(uint index, float offset) {
+				return LumaData(0.57 + (index * 0.11) + lerp(0, 0.107, offset), 0.493);
+			}
+			void initPoiAudioLink(inout PoiMods poiMods)
+			{
+				if (!float(1)) return;
+				if (AudioLinkIsAvailable())
+				{
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkVersion = AudioLinkGetVersion();
+					poiMods.audioLink.x = AudioLinkData(ALPASS_AUDIOBASS).r;
+					poiMods.audioLink.y = AudioLinkData(ALPASS_AUDIOLOWMIDS).r;
+					poiMods.audioLink.z = AudioLinkData(ALPASS_AUDIOHIGHMIDS).r;
+					poiMods.audioLink.w = AudioLinkData(ALPASS_AUDIOTREBLE).r;
+					poiMods.globalColorTheme[4] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(2, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[5] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(3, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[6] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(4, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[7] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(5, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[8] = AudioLinkData(ALPASS_THEME_COLOR0);
+					poiMods.globalColorTheme[9] = AudioLinkData(ALPASS_THEME_COLOR1);
+					poiMods.globalColorTheme[10] = AudioLinkData(ALPASS_THEME_COLOR2);
+					poiMods.globalColorTheme[11] = AudioLinkData(ALPASS_THEME_COLOR3);
+					return;
+				}
+				if (LumaIsAvailable())
+				{
+					float4 audioPixel = LumaData(0.578, 0.515);
+					float audioLows = audioPixel.r;
+					float audioHighs = audioPixel.g;
+					float4 zone1 = LumaData(0.856, 0.522);
+					float4 zone2 = LumaData(0.856, 0.507);
+					float4 zone3 = LumaData(0.864, 0.522);
+					float4 zone4 = LumaData(0.864, 0.507);
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkViaLuma = true;
+					poiMods.audioLink.xy = audioLows;
+					poiMods.audioLink.zw = audioHighs;
+					poiMods.globalColorTheme[8] = zone1;
+					poiMods.globalColorTheme[9] = zone2;
+					poiMods.globalColorTheme[10] = zone3;
+					poiMods.globalColorTheme[11] = zone4;
+				}
+			}
+			void DebugVisualizer(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiMods poiMods){
+				if (_DebugWaveform){
+					float waveform = AudioLinkLerpMultiline(ALPASS_WAVEFORM + float2( 500. * poiMesh.uv[0].x, 0)).r;
+					poiFragData.emission += clamp(1 - 50 * abs(waveform - poiMesh.uv[0].y * 2. + 1), 0, 1);
+				}
+				if (_DebugDFT){
+					poiFragData.emission += AudioLinkLerpMultiline(ALPASS_DFT + uint2(poiMesh.uv[0].x * AUDIOLINK_ETOTALBINS, 0)).rrr;
+				}
+				if (_DebugBass){
+					poiFragData.emission += poiMods.audioLink.x;
+				}
+				if (_DebugLowMids){
+					poiFragData.emission += poiMods.audioLink.y;
+				}
+				if (_DebugHighMids){
+					poiFragData.emission += poiMods.audioLink.z;
+				}
+				if (_DebugTreble){
+					poiFragData.emission += poiMods.audioLink.w;
+				}
+				if (_DebugCCColors){
+					poiFragData.emission += AudioLinkData(ALPASS_CCCOLORS + uint2(3 + 1, 0));
+				}
+				if (_DebugCCStrip){
+					poiFragData.emission += AudioLinkLerp(ALPASS_CCSTRIP + float2(poiMesh.uv[0].x * AUDIOLINK_WIDTH, 0));
+				}
+				if (_DebugCCLights){
+					poiFragData.emission += AudioLinkData(ALPASS_CCLIGHTS + uint2(uint(poiMesh.uv[0].x * 8) + uint(poiMesh.uv[0].y * 16) * 8, 0));
+				}
+				if (_DebugAutocorrelator){
+					poiFragData.emission += saturate(AudioLinkLerp(ALPASS_AUTOCORRELATOR + float2((abs(1. - poiMesh.uv[0].x * 2.)) * AUDIOLINK_WIDTH, 0)).rrr);
+				}
+				if (_DebugChronotensity){
+					poiFragData.emission += (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY  + uint2(1, 0)) % 1000000) / 1000000.0;
+				}
+			}
+			void SetupAudioLink(inout PoiFragData poiFragData, inout PoiMods poiMods, in PoiMesh poiMesh){
+				initPoiAudioLink(poiMods);
+				DebugVisualizer(poiFragData, poiMesh, poiMods);
+				if(_AudioLinkCCStripY)
+				{
+					poiFragData.emission += AudioLinkLerp( ALPASS_CCSTRIP + float2( poiMesh.uv[0].y * AUDIOLINK_WIDTH, 0 ) ).rgb * .5;
+				}
+			}
+			#endif
 			v2f vert(appdata v)
 			{
 				UNITY_SETUP_INSTANCE_ID(v);
@@ -6618,6 +7530,10 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				poiCam.vDotN = abs(dot(poiCam.viewDir, poiMesh.normals[1]));
 				poiCam.clipPos = i.pos;
 				poiCam.worldDirection = i.worldDirection;
+				//ifex float(1)==0
+				#ifdef POI_AUDIOLINK
+				SetupAudioLink(poiFragData, poiMods, poiMesh);
+				#endif
 				poiFragData.baseColor = mainTexture.rgb * poiThemeColor(poiMods, float4(1,1,1,1).rgb, float(0));
 				poiFragData.alpha = mainTexture.a * float4(1,1,1,1).a;
 				#if defined(PROP_CLIPPINGMASK) || !defined(OPTIMIZER_ENABLED)
@@ -6659,6 +7575,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			Blend [_SrcBlend] [_DstBlend]
 			CGPROGRAM
  #define OPTIMIZER_ENABLED 
+ #define POI_AUDIOLINK 
  #define POI_LIGHT_DATA_ADDITIVE_DIRECTIONAL_ENABLE 
  #define POI_LIGHT_DATA_ADDITIVE_ENABLE 
  #define POI_VERTEXLIGHT_ON 
@@ -6667,6 +7584,7 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
  #define _LIGHTINGMODE_REALISTIC 
  #define PROP_EMISSIONMAP 
 			#pragma target 5.0
+			//ifex float(1)==0
 			//ifex float(1)==0
 			//ifex float(1)==0
 			#pragma multi_compile_instancing
@@ -6710,6 +7628,76 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			#define POI_MODE_MULTIPLICATIVE 6
 			#define POI_MODE_2XMULTIPLICATIVE 7
 			#define POI_MODE_TRANSCLIPPING 9
+			//ifex float(1)==0
+			#define ALPASS_DFT                      uint2(0,4)   //Size: 128, 2
+			#define ALPASS_WAVEFORM                 uint2(0,6)   //Size: 128, 16
+			#define ALPASS_AUDIOLINK                uint2(0,0)   //Size: 128, 4
+			#define ALPASS_AUDIOBASS                uint2(0,0)   //Size: 128, 1
+			#define ALPASS_AUDIOLOWMIDS             uint2(0,1)   //Size: 128, 1
+			#define ALPASS_AUDIOHIGHMIDS            uint2(0,2)   //Size: 128, 1
+			#define ALPASS_AUDIOTREBLE              uint2(0,3)   //Size: 128, 1
+			#define ALPASS_AUDIOLINKHISTORY         uint2(1,0)   //Size: 127, 4
+			#define ALPASS_GENERALVU                uint2(0,22)  //Size: 12, 1
+			#define ALPASS_CCINTERNAL               uint2(12,22) //Size: 12, 2
+			#define ALPASS_CCCOLORS                 uint2(25,22) //Size: 11, 1
+			#define ALPASS_CCSTRIP                  uint2(0,24)  //Size: 128, 1
+			#define ALPASS_CCLIGHTS                 uint2(0,25)  //Size: 128, 2
+			#define ALPASS_AUTOCORRELATOR           uint2(0,27)  //Size: 128, 1
+			#define ALPASS_GENERALVU_INSTANCE_TIME  uint2(2,22)
+			#define ALPASS_GENERALVU_LOCAL_TIME     uint2(3,22)
+			#define ALPASS_GENERALVU_NETWORK_TIME   uint2(4,22)
+			#define ALPASS_GENERALVU_PLAYERINFO     uint2(6,22)
+			#define ALPASS_FILTEREDAUDIOLINK        uint2(0,28)  //Size: 16, 4
+			#define ALPASS_CHRONOTENSITY            uint2(16,28) //Size: 8, 4
+			#define ALPASS_THEME_COLOR0             uint2(0,23)
+			#define ALPASS_THEME_COLOR1             uint2(1,23)
+			#define ALPASS_THEME_COLOR2             uint2(2,23)
+			#define ALPASS_THEME_COLOR3             uint2(3,23)
+			#define ALPASS_FILTEREDVU               uint2(24,28) //Size: 4, 4
+			#define ALPASS_FILTEREDVU_INTENSITY     uint2(24,28) //Size: 4, 1
+			#define ALPASS_FILTEREDVU_MARKER        uint2(24,29) //Size: 4, 1
+			#define AUDIOLINK_SAMPHIST              3069        // Internal use for algos, do not change.
+			#define AUDIOLINK_SAMPLEDATA24          2046
+			#define AUDIOLINK_EXPBINS               24
+			#define AUDIOLINK_EXPOCT                10
+			#define AUDIOLINK_ETOTALBINS (AUDIOLINK_EXPBINS * AUDIOLINK_EXPOCT)
+			#define AUDIOLINK_WIDTH                 128
+			#define AUDIOLINK_SPS                   48000       // Samples per second
+			#define AUDIOLINK_ROOTNOTE              0
+			#define AUDIOLINK_4BAND_FREQFLOOR       0.123
+			#define AUDIOLINK_4BAND_FREQCEILING     1
+			#define AUDIOLINK_BOTTOM_FREQUENCY      13.75
+			#define AUDIOLINK_BASE_AMPLITUDE        2.5
+			#define AUDIOLINK_DELAY_COEFFICIENT_MIN 0.3
+			#define AUDIOLINK_DELAY_COEFFICIENT_MAX 0.9
+			#define AUDIOLINK_DFT_Q                 4.0
+			#define AUDIOLINK_TREBLE_CORRECTION     5.0
+			#define COLORCHORD_EMAXBIN              192
+			#define COLORCHORD_IIR_DECAY_1          0.90
+			#define COLORCHORD_IIR_DECAY_2          0.85
+			#define COLORCHORD_CONSTANT_DECAY_1     0.01
+			#define COLORCHORD_CONSTANT_DECAY_2     0.0
+			#define COLORCHORD_NOTE_CLOSEST         3.0
+			#define COLORCHORD_NEW_NOTE_GAIN        8.0
+			#define COLORCHORD_MAX_NOTES            10
+			#ifndef glsl_mod
+			#define glsl_mod(x, y) (((x) - (y) * floor((x) / (y))))
+			#endif
+			uniform float4               _AudioTexture_TexelSize;
+			#ifdef SHADER_TARGET_SURFACE_ANALYSIS
+			#define AUDIOLINK_STANDARD_INDEXING
+			#endif
+			#ifdef AUDIOLINK_STANDARD_INDEXING
+			sampler2D _AudioTexture;
+			#define AudioLinkData(xycoord) tex2Dlod(_AudioTexture, float4(uint2(xycoord) * _AudioTexture_TexelSize.xy, 0, 0))
+			#else
+			uniform Texture2D<float4> _AudioTexture;
+			SamplerState sampler_AudioTexture;
+			#define AudioLinkData(xycoord) _AudioTexture[uint2(xycoord)]
+			#endif
+			uniform sampler2D _Stored;
+			uniform float4 _Stored_TexelSize;
+			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			float _Mode;
 			float4 _GlobalThemeColor0;
 			float4 _GlobalThemeColor1;
@@ -6722,6 +7710,23 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 			float _PolarLengthScale;
 			float _PolarSpiralPower;
 			float _PanoUseBothEyes;
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float _AudioLinkDelay;
+			float _AudioLinkAnimToggle;
+			float _DebugWaveform;
+			float _DebugDFT;
+			float _DebugBass;
+			float _DebugLowMids;
+			float _DebugHighMids;
+			float _DebugTreble;
+			float _DebugCCColors;
+			float _DebugCCStrip;
+			float _DebugCCLights;
+			float _DebugAutocorrelator;
+			float _DebugChronotensity;
+			float _AudioLinkCCStripY;
+			#endif
 			float _IgnoreFog;
 			float _RenderingReduceClipDistance;
 			float _AddBlendOp;
@@ -7795,6 +8800,216 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				p = (p - 0.5)*texelSize.xy;
 				return p;
 			}
+			//ifex float(1)==0
+			#ifdef POI_AUDIOLINK
+			float4 AudioLinkDataMultiline(uint2 xycoord) { return AudioLinkData(uint2(xycoord.x % AUDIOLINK_WIDTH, xycoord.y + xycoord.x/AUDIOLINK_WIDTH)); }
+			float4 AudioLinkLerp(float2 xy) { return lerp( AudioLinkData(xy), AudioLinkData(xy+int2(1,0)), frac( xy.x ) ); }
+			float4 AudioLinkLerpMultiline(float2 xy) { return lerp(AudioLinkDataMultiline(xy), AudioLinkDataMultiline(xy+float2(1,0)), frac(xy.x)); }
+			bool AudioLinkIsAvailable()
+			{
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				int width, height;
+				_AudioTexture.GetDimensions(width, height);
+				return width > 16;
+				#else
+				return _AudioTexture_TexelSize.z > 16;
+				#endif
+			}
+			float AudioLinkGetVersion()
+			{
+				int2 dims;
+				#if !defined(AUDIOLINK_STANDARD_INDEXING)
+				_AudioTexture.GetDimensions(dims.x, dims.y);
+				#else
+				dims = _AudioTexture_TexelSize.zw;
+				#endif
+				if (dims.x >= 128)
+				return AudioLinkData(ALPASS_GENERALVU).x;
+				else if (dims.x > 16)
+				return 1;
+				else
+				return 0;
+			}
+			#define AudioLinkGetSelfPixelData(xy) _SelfTexture2D[xy]
+			uint AudioLinkDecodeDataAsUInt(uint2 indexloc)
+			{
+				uint4 rpx = AudioLinkData(indexloc);
+				return rpx.r + rpx.g*1024 + rpx.b * 1048576 + rpx.a * 1073741824;
+			}
+			float AudioLinkDecodeDataAsSeconds(uint2 indexloc)
+			{
+				uint time = AudioLinkDecodeDataAsUInt(indexloc) & 0x7ffffff;
+				return float(time / 1000) + float( time % 1000 ) / 1000.;
+			}
+			#define ALDecodeDataAsSeconds( x ) AudioLinkDecodeDataAsSeconds( x )
+			#define ALDecodeDataAsUInt( x ) AudioLinkDecodeDataAsUInt( x )
+			float AudioLinkRemap(float t, float a, float b, float u, float v) { return ((t-a) / (b-a)) * (v-u) + u; }
+			float3 AudioLinkHSVtoRGB(float3 HSV)
+			{
+				float3 RGB = 0;
+				float C = HSV.z * HSV.y;
+				float H = HSV.x * 6;
+				float X = C * (1 - abs(fmod(H, 2) - 1));
+				if (HSV.y != 0)
+				{
+					float I = floor(H);
+					if (I == 0) { RGB = float3(C, X, 0); }
+					else if (I == 1) { RGB = float3(X, C, 0); }
+					else if (I == 2) { RGB = float3(0, C, X); }
+					else if (I == 3) { RGB = float3(0, X, C); }
+					else if (I == 4) { RGB = float3(X, 0, C); }
+					else { RGB = float3(C, 0, X); }
+				}
+				float M = HSV.z - C;
+				return RGB + M;
+			}
+			float3 AudioLinkCCtoRGB(float bin, float intensity, int rootNote)
+			{
+				float note = bin / AUDIOLINK_EXPBINS;
+				float hue = 0.0;
+				note *= 12.0;
+				note = glsl_mod(4. - note + rootNote, 12.0);
+				{
+					if(note < 4.0)
+					{
+						hue = (note) / 24.0;
+					}
+					else if(note < 8.0)
+					{
+						hue = (note-2.0) / 12.0;
+					}
+					else
+					{
+						hue = (note - 4.0) / 8.0;
+					}
+				}
+				float val = intensity - 0.1;
+				return AudioLinkHSVtoRGB(float3(fmod(hue, 1.0), 1.0, clamp(val, 0.0, 1.0)));
+			}
+			float4 AudioLinkGetAmplitudeAtFrequency(float hertz)
+			{
+				float note = AUDIOLINK_EXPBINS * log2(hertz / AUDIOLINK_BOTTOM_FREQUENCY);
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(note, 0));
+			}
+			float AudioLinkGetAmplitudeAtNote(float octave, float note)
+			{
+				float quarter = note * 2.0;
+				return AudioLinkLerpMultiline(ALPASS_DFT + float2(octave * AUDIOLINK_EXPBINS + quarter, 0));
+			}
+			float AudioLinkGetChronoTime(uint index, uint band)
+			{
+				return (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY + uint2(index, band))) / 100000.0;
+			}
+			float AudioLinkGetChronoTimeNormalized(uint index, uint band, float speed)
+			{
+				return frac(AudioLinkGetChronoTime(index, band) * speed);
+			}
+			float AudioLinkGetChronoTimeInterval(uint index, uint band, float speed, float interval)
+			{
+				return AudioLinkGetChronoTimeNormalized(index, band, speed) * interval;
+			}
+			float getBandAtTime(float band, float time, float size = 1.0f)
+			{
+				return remapClamped(min(size,.9999), 1, AudioLinkData(ALPASS_AUDIOBASS + uint2(time * AUDIOLINK_WIDTH,band)).r);
+			}
+			fixed3 maximize(fixed3 c) {
+				if (c.x == 0 && c.y == 0 && c.z == 0)
+				return fixed3(1.0, 1.0, 1.0);
+				else
+				return c / max(c.r, max(c.g, c.b));
+			}
+			bool LumaIsAvailable()
+			{
+				return LumaData(0.629, 0.511).r > 0.9;
+			}
+			float3 getLumaGradient(uint index, float offset) {
+				return LumaData(0.57 + (index * 0.11) + lerp(0, 0.107, offset), 0.493);
+			}
+			void initPoiAudioLink(inout PoiMods poiMods)
+			{
+				if (!float(1)) return;
+				if (AudioLinkIsAvailable())
+				{
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkVersion = AudioLinkGetVersion();
+					poiMods.audioLink.x = AudioLinkData(ALPASS_AUDIOBASS).r;
+					poiMods.audioLink.y = AudioLinkData(ALPASS_AUDIOLOWMIDS).r;
+					poiMods.audioLink.z = AudioLinkData(ALPASS_AUDIOHIGHMIDS).r;
+					poiMods.audioLink.w = AudioLinkData(ALPASS_AUDIOTREBLE).r;
+					poiMods.globalColorTheme[4] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(2, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[5] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(3, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[6] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(4, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[7] =  float4(AudioLinkCCtoRGB(glsl_mod(AudioLinkData(ALPASS_CCINTERNAL + uint2(5, 0)).x, AUDIOLINK_EXPBINS), 1, AUDIOLINK_ROOTNOTE), 1.0);
+					poiMods.globalColorTheme[8] = AudioLinkData(ALPASS_THEME_COLOR0);
+					poiMods.globalColorTheme[9] = AudioLinkData(ALPASS_THEME_COLOR1);
+					poiMods.globalColorTheme[10] = AudioLinkData(ALPASS_THEME_COLOR2);
+					poiMods.globalColorTheme[11] = AudioLinkData(ALPASS_THEME_COLOR3);
+					return;
+				}
+				if (LumaIsAvailable())
+				{
+					float4 audioPixel = LumaData(0.578, 0.515);
+					float audioLows = audioPixel.r;
+					float audioHighs = audioPixel.g;
+					float4 zone1 = LumaData(0.856, 0.522);
+					float4 zone2 = LumaData(0.856, 0.507);
+					float4 zone3 = LumaData(0.864, 0.522);
+					float4 zone4 = LumaData(0.864, 0.507);
+					poiMods.audioLinkAvailable = true;
+					poiMods.audioLinkViaLuma = true;
+					poiMods.audioLink.xy = audioLows;
+					poiMods.audioLink.zw = audioHighs;
+					poiMods.globalColorTheme[8] = zone1;
+					poiMods.globalColorTheme[9] = zone2;
+					poiMods.globalColorTheme[10] = zone3;
+					poiMods.globalColorTheme[11] = zone4;
+				}
+			}
+			void DebugVisualizer(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiMods poiMods){
+				if (_DebugWaveform){
+					float waveform = AudioLinkLerpMultiline(ALPASS_WAVEFORM + float2( 500. * poiMesh.uv[0].x, 0)).r;
+					poiFragData.emission += clamp(1 - 50 * abs(waveform - poiMesh.uv[0].y * 2. + 1), 0, 1);
+				}
+				if (_DebugDFT){
+					poiFragData.emission += AudioLinkLerpMultiline(ALPASS_DFT + uint2(poiMesh.uv[0].x * AUDIOLINK_ETOTALBINS, 0)).rrr;
+				}
+				if (_DebugBass){
+					poiFragData.emission += poiMods.audioLink.x;
+				}
+				if (_DebugLowMids){
+					poiFragData.emission += poiMods.audioLink.y;
+				}
+				if (_DebugHighMids){
+					poiFragData.emission += poiMods.audioLink.z;
+				}
+				if (_DebugTreble){
+					poiFragData.emission += poiMods.audioLink.w;
+				}
+				if (_DebugCCColors){
+					poiFragData.emission += AudioLinkData(ALPASS_CCCOLORS + uint2(3 + 1, 0));
+				}
+				if (_DebugCCStrip){
+					poiFragData.emission += AudioLinkLerp(ALPASS_CCSTRIP + float2(poiMesh.uv[0].x * AUDIOLINK_WIDTH, 0));
+				}
+				if (_DebugCCLights){
+					poiFragData.emission += AudioLinkData(ALPASS_CCLIGHTS + uint2(uint(poiMesh.uv[0].x * 8) + uint(poiMesh.uv[0].y * 16) * 8, 0));
+				}
+				if (_DebugAutocorrelator){
+					poiFragData.emission += saturate(AudioLinkLerp(ALPASS_AUTOCORRELATOR + float2((abs(1. - poiMesh.uv[0].x * 2.)) * AUDIOLINK_WIDTH, 0)).rrr);
+				}
+				if (_DebugChronotensity){
+					poiFragData.emission += (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY  + uint2(1, 0)) % 1000000) / 1000000.0;
+				}
+			}
+			void SetupAudioLink(inout PoiFragData poiFragData, inout PoiMods poiMods, in PoiMesh poiMesh){
+				initPoiAudioLink(poiMods);
+				DebugVisualizer(poiFragData, poiMesh, poiMods);
+				if(_AudioLinkCCStripY)
+				{
+					poiFragData.emission += AudioLinkLerp( ALPASS_CCSTRIP + float2( poiMesh.uv[0].y * AUDIOLINK_WIDTH, 0 ) ).rgb * .5;
+				}
+			}
+			#endif
 			v2f vert(appdata v)
 			{
 				UNITY_SETUP_INSTANCE_ID(v);
@@ -8081,8 +9296,8 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 					emissionMask0 *= blackLightMask[_BlackLightMaskEmission];
 				}
 				#endif
-				applyALEmmissionStrength(poiMods, emissionStrength0, float4(0,0,0,0), float(0), float4(1,1,0,0), float(0), float(0));
-				applyALCenterOutEmission(poiMods, poiLight.nDotV, emissionStrength0, float(0), float(0), float4(0,0,0,0), float(0));
+				applyALEmmissionStrength(poiMods, emissionStrength0, float4(0,0.5,0,0), float(2), float4(1,2,0,0), float(0), float(1));
+				applyALCenterOutEmission(poiMods, poiLight.nDotV, emissionStrength0, float(0), float(2), float4(0,0,0,0), float(1));
 				emissionStrength0 *= glowInTheDarkMultiplier0 * emissionMask0;
 				emission0 = max(emissionStrength0 * emissionColor0, 0);
 				#ifdef POI_DISSOLVE
@@ -8185,6 +9400,10 @@ Shader "Hidden/Locked/.poiyomi/Poiyomi 8.1/Poiyomi Pro World/5f0d703b801d0f54da1
 				poiCam.clipPos = i.pos;
 				poiCam.worldDirection = i.worldDirection;
 				calculateGlobalThemes(poiMods);
+				//ifex float(1)==0
+				#ifdef POI_AUDIOLINK
+				SetupAudioLink(poiFragData, poiMods, poiMesh);
+				#endif
 				poiFragData.baseColor = mainTexture.rgb * poiThemeColor(poiMods, float4(1,1,1,1).rgb, float(0));
 				poiFragData.alpha = mainTexture.a * float4(1,1,1,1).a;
 				#if defined(PROP_CLIPPINGMASK) || !defined(OPTIMIZER_ENABLED)

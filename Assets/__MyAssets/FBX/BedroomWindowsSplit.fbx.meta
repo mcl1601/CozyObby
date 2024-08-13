@@ -31,7 +31,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties:
-    - '#BAKERY{"meshName":["BedroomWindow.002","BedroomWindow.001","BedroomWindow"],"padding":[33,33,26],"unwrapper":[1,1,1]}'
+    - '#BAKERY{"meshName":["BedroomWindow.002","BedroomWindow.001","BedroomWindow"],"padding":[25,25,19],"unwrapper":[1,1,1]}'
     clipAnimations: []
     isReadable: 0
   meshes:

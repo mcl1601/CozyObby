@@ -12,7 +12,10 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - USE_AUDIOLINK
+  - _ENABLEAUDIOLINK_OFF
+  - _ENABLEAUDIOLINK_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -23,6 +26,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AudioLink:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -97,6 +104,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AudioLinkEmissionBand: 0
+    - _AudioLinkEmissionIntensity: 0.5
+    - _AudioLinkEmissionToggle: 0
+    - _AudioLinkIntensity: 1
+    - _AudioLinkTimeMod: 0
     - _Brightness: 96.46
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -104,6 +116,7 @@ Material:
     - _DstBlend: 0
     - _ElementNormalWeight1: 0
     - _ElementSmoothness: 0.5
+    - _EnableAudioLink: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1

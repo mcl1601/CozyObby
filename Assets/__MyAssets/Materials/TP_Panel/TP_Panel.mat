@@ -136,7 +136,7 @@ Material:
     - _ParallaxOffset: 0
     - _ParallaxSteps: 16
     - _Reflectance: 0.5
-    - _Roughness: 0
+    - _Roughness: 0.256
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularOcclusion: 1

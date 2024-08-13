@@ -21,7 +21,6 @@ Material:
   - _CUBEMAP
   - _EMISSION
   - _LIGHTINGMODE_FLAT
-  - _RIMSTYLE_POIYOMI
   - _TPS_ANIMATEDTOGGLE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -92,7 +91,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _CubeMap:
-        m_Texture: {fileID: 8900000, guid: f54255fdbc6f837499e5febf14b0bf7b, type: 3}
+        m_Texture: {fileID: 8900000, guid: bde76548c9e44d648880384ae5792df6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _CubeMapMask:

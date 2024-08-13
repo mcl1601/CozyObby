@@ -31,7 +31,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties:
-    - '#BAKERY{"meshName":["Blanket5","Blanket4","Blanket3","Blanket2","Blanket1"],"padding":[17,17,21,18,26],"unwrapper":[1,1,1,1,1]}'
+    - '#BAKERY{"meshName":["Blanket5","Blanket4","Blanket3","Blanket2","Blanket1"],"padding":[13,12,16,14,19],"unwrapper":[1,1,1,1,1]}'
     clipAnimations: []
     isReadable: 0
   meshes:

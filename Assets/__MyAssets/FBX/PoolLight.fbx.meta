@@ -31,7 +31,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties:
-    - '#BAKERY{"meshName":["PoolLightBar","PoolLight","LightChain"],"padding":[256,56,158],"unwrapper":[1,1,1]}'
+    - '#BAKERY{"meshName":["PoolLightBar","PoolLight","LightChain"],"padding":[242,42,118],"unwrapper":[1,1,1]}'
     clipAnimations: []
     isReadable: 0
   meshes:

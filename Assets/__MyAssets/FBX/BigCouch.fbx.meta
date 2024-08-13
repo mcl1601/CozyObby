@@ -31,7 +31,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties:
-    - '#BAKERY{"meshName":["OttomanCushion","Ottoman","CouchStraight.005","CouchStraight.004","CouchStraight.003","CouchStraight.002","CouchStraight.001","CouchStraight","CouchCorner"],"padding":[31,23,29,29,29,29,29,29,25],"unwrapper":[1,1,1,1,1,1,1,1,1]}'
+    - '#BAKERY{"meshName":["OttomanCushion","Ottoman","CouchStraight.005","CouchStraight.004","CouchStraight.003","CouchStraight.002","CouchStraight.001","CouchStraight","CouchCorner"],"padding":[23,17,21,21,21,21,21,21,19],"unwrapper":[1,1,1,1,1,1,1,1,1]}'
     clipAnimations: []
     isReadable: 0
   meshes:

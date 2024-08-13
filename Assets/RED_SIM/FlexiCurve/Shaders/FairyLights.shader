@@ -26,6 +26,11 @@ Shader "RED_SIM/FairyLights"
 		[Header(Forward Rendering Options)]
 		[ToggleOff] _SpecularHighlights("Specular Highlights", Float) = 1.0
 		[ToggleOff] _GlossyReflections("Reflections", Float) = 1.0
+		[Header(AudioLink)]
+		[Toggle] _EnableAudioLink("Enable AudioLink", Float) = 0
+		[Enum(Bass, 0, Low Mids, 1, High Mids, 2, Treble, 3)] _AudioLinkEmissionBand ("Band", Int) = 0
+		_AudioLinkIntensity("Audio Link Intensity", Float) = 1.0
+		_AudioLinkTimeMod("Audio Link Speed Modifier", Float) = 0
 	}
 
 	SubShader
@@ -35,6 +40,8 @@ Shader "RED_SIM/FairyLights"
 		CGPROGRAM
 		#include "UnityStandardUtils.cginc"
 		#include "UnityShaderVariables.cginc"
+		#include "UnityCG.cginc"
+		#include "Packages/com.llealloo.audiolink/Runtime/Shaders/AudioLink.cginc"
 		#pragma target 3.0
 		#pragma shader_feature _SPECULARHIGHLIGHTS_OFF
 		#pragma shader_feature _GLOSSYREFLECTIONS_OFF
@@ -65,6 +72,10 @@ Shader "RED_SIM/FairyLights"
 		uniform float _Brightness;
 		uniform float _WireSmoothness;
 		uniform float _ElementSmoothness;
+		uniform float _EnableAudioLink;
+		uniform int _AudioLinkEmissionBand;
+		uniform float _AudioLinkIntensity;
+		uniform float _AudioLinkTimeMod;
 
 
 		float3 HSVToRGB( float3 c )
@@ -87,6 +98,7 @@ Shader "RED_SIM/FairyLights"
 
 		void surf( Input i , inout SurfaceOutputStandard o )
 		{
+			float alValue = AudioLinkLerp(uint2(1, _AudioLinkEmissionBand)).r * _EnableAudioLink;
 			float3 uvs_Wire = i.uv_texcoord;
 			uvs_Wire.xy = i.uv_texcoord.xy * _Wire_ST.xy + _Wire_ST.zw;
 			float ElementMask63 = sign( i.uv_texcoord.z );
@@ -99,11 +111,16 @@ Shader "RED_SIM/FairyLights"
 			float2 uv_ElementMask17 = i.uv_texcoord;
 			float mulTime51 = _Time.y * _HueShiftSpeed;
 			float mulTime47 = _Time.y * -_Speed;
+			float timeAL = _Time.y * (alValue * -_AudioLinkTimeMod);
+			mulTime47 = min(mulTime47, timeAL);
 			float temp_output_43_0 = ( ( i.uv_texcoord.z * _Scale ) + mulTime47 );
 			float2 appendResult60 = (float2(temp_output_43_0 , temp_output_43_0));
 			float3 hsvTorgb34 = RGBToHSV( ( tex2D( _GradientMap, appendResult60 ) * _Color * _Brightness ).rgb );
 			float3 hsvTorgb54 = HSVToRGB( float3(( mulTime51 + hsvTorgb34.x ),hsvTorgb34.y,hsvTorgb34.z) );
 			o.Emission = ( tex2D( _ElementMask, uv_ElementMask17 ).r * ( ElementMask63 * hsvTorgb54 ) );
+
+			o.Emission = o.Emission + ((alValue * _AudioLinkIntensity) * o.Emission);
+			
 			float lerpResult68 = lerp( _WireSmoothness , _ElementSmoothness , ElementMask63);
 			o.Smoothness = lerpResult68;
 			o.Alpha = 1;

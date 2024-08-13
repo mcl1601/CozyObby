@@ -31,7 +31,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties:
-    - '#BAKERY{"meshName":["PoolWindows.001","PoolWindows"],"padding":[26,23],"unwrapper":[1,1]}'
+    - '#BAKERY{"meshName":["PoolWindows.001","PoolWindows"],"padding":[19,17],"unwrapper":[1,1]}'
     clipAnimations: []
     isReadable: 0
   meshes:

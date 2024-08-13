@@ -9,11 +9,13 @@ public class Crown : UdonSharpBehaviour
 {
     public VRCPlayerApi _player = null;
     private MeshRenderer crown;
+    private Animator anim;
     [SerializeField] Vector3 offset;
     
     void Start()
     {
         crown = transform.GetChild(0).GetComponent<MeshRenderer>();
+        anim = transform.GetChild(0).GetComponent<Animator>();
     }
 
     void Update()
@@ -37,6 +39,20 @@ public class Crown : UdonSharpBehaviour
             crown.enabled = true;
             //crown.gameObject.SetActive(true);
         }
+    }
+
+    public void SetWinnerInfo(VRCPlayerApi p, int animState)
+    {
+        _player = p;
+        if(p == null)
+        {
+            crown.enabled = false;
+        }
+        else
+        {
+            crown.enabled = true;
+        }
+        anim.Play(animState.ToString());
     }
 
     public override void OnPlayerLeft(VRCPlayerApi player)

@@ -31,13 +31,13 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties:
-    - '#BAKERY{"meshName":["RoofTile"],"padding":[6],"unwrapper":[1]}'
+    - '#BAKERY{"meshName":["RoofTile"],"padding":[5],"unwrapper":[1]}'
     clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 100
-    meshCompression: 0
+    meshCompression: 3
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
