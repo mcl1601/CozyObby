@@ -14,6 +14,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BAKERY_MONOSH
+  - BICUBIC_LIGHTMAP
   - _MASKMAP
   - _NORMALMAP
   m_InvalidKeywords:
@@ -115,7 +116,7 @@ Material:
     - _AudioLinkEmissionIntensity: 0.5
     - _AudioLinkEmissionToggle: 0
     - _BAKERY_MONOSH: 1
-    - _BICUBIC_LIGHTMAP: 0
+    - _BICUBIC_LIGHTMAP: 1
     - _BakeryAlphaDither: 0
     - _BumpScale: 1
     - _Cull: 2

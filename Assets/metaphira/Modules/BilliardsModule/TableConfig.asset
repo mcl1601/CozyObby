@@ -20,8 +20,8 @@ MonoBehaviour:
     GUID: 8cb1d30b3c92aa443bcddc8949b88da1
   _colourDefault: {r: 1, g: 1, b: 1, a: 1}
   _colourFoul: {r: 1, g: 0, b: 0, a: 1}
-  _8ball_fabric_colour: {r: 0.44339612, g: 0.44339612, b: 0.44339612, a: 1}
-  _8ball_team_colour_0: {r: 0, g: 0.63529414, b: 1, a: 1}
+  _8ball_fabric_colour: {r: 0.47058824, g: 0.43529412, b: 0.43529412, a: 1}
+  _8ball_team_colour_0: {r: 0.7068131, g: 0.45323068, b: 0.9150943, a: 1}
   _8ball_team_colour_1: {r: 1, g: 0.40000004, b: 0, a: 1}
   _9ball_fabric_colour: {r: 0, g: 0.5568628, b: 1, a: 1}
   _9ball_colours:

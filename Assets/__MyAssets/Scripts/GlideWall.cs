@@ -34,7 +34,7 @@ public class GlideWall : UdonSharpBehaviour
 
         Vector3 headForward = input.head.rotation * Vector3.forward;
         Vector3 headRight = input.head.rotation * Vector3.right;
-        recalculatedVel += ((headForward.normalized * input.vertMove) + (headRight * input.horMove)) * Time.deltaTime * boostVal;
+        recalculatedVel += ((headForward * input.vertMove) + (headRight * input.horMove)) * Time.deltaTime * boostVal;
         player.SetVelocity(recalculatedVel);
     }
 

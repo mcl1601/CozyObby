@@ -14,8 +14,9 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BAKERY_MONOSH
+  - _EMISSION
   m_InvalidKeywords: []
-  m_LightmapFlags: 6
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -62,7 +63,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 77885466d712a1f4e95ace6df30f6cc2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -122,7 +123,7 @@ Material:
     - _DstBlend: 0
     - _EmissionGIMultiplier: 1
     - _EmissionMultiplyBase: 0
-    - _EmissionToggle: 0
+    - _EmissionToggle: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.792
     - _GlossyReflections: 1
@@ -150,6 +151,6 @@ Material:
     - _specularAntiAliasingVariance: 0.15
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.5, g: 0.31517598, b: 0.115566045, a: 1}
     - _WindIntensity: {r: 0.1, g: 0.1, b: 0.1, a: 0}
   m_BuildTextureStacks: []

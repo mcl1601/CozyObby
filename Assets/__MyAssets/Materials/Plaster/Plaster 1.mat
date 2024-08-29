@@ -8,16 +8,17 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Plaster 1
-  m_Shader: {fileID: -6465566751694194690, guid: d81a63774aedf404484cdd1118f35b0c,
+  m_Shader: {fileID: -6465566751694194690, guid: ee3045976cdf80a4ca15a5c4c80ebfed,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BAKERY_MONOSH
+  - BICUBIC_LIGHTMAP
   - _MASKMAP
   - _NORMALMAP
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -110,7 +111,7 @@ Material:
     - _AudioLinkEmissionIntensity: 0.5
     - _AudioLinkEmissionToggle: 0
     - _BAKERY_MONOSH: 1
-    - _BICUBIC_LIGHTMAP: 0
+    - _BICUBIC_LIGHTMAP: 1
     - _BakeryAlphaDither: 0
     - _BumpScale: 0.36
     - _Cull: 2
@@ -125,6 +126,7 @@ Material:
     - _EmissionGIMultiplier: 1
     - _EmissionMultiplyBase: 0
     - _EmissionToggle: 0
+    - _GEOMETRICSPECULAR_AA: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

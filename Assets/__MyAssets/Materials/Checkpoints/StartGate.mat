@@ -8,10 +8,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: StartGate
-  m_Shader: {fileID: 4800000, guid: 7b930b87172049241bbd94d0763b9c48, type: 3}
+  m_Shader: {fileID: 4800000, guid: 65bd06270b7f7574f88c6bef704e57ab, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - POI_AUDIOLINK
   - POI_LIGHT_DATA_ADDITIVE_DIRECTIONAL_ENABLE
   - POI_LIGHT_DATA_ADDITIVE_ENABLE
@@ -19,8 +20,6 @@ Material:
   - VIGNETTE_MASKED
   - _EMISSION
   - _LIGHTINGMODE_REALISTIC
-  - _RIMSTYLE_POIYOMI
-  m_InvalidKeywords:
   - _TPS_ANIMATEDTOGGLE_ON
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
@@ -1503,7 +1502,7 @@ Material:
     - _ScrollingEmission3: 0
     - _Set_HighColorMaskUV: 0
     - _ShadeColor_Step: 0
-    - _ShaderOptimizerEnabled: 0
+    - _ShaderOptimizerEnabled: 1
     - _ShadingEnabled: 1
     - _ShadingShadeMapBlendType: 0
     - _Shadow2ndBlur: 0.3

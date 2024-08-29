@@ -115,7 +115,7 @@ public class TableConfigurationData : ScriptableObject
         Texture2D writetex = new Texture2D(x, y, TextureFormat.RGBA32, false);
         writetex.SetPixels(src, 0);
 
-        string output_path = $"{Application.dataPath}/metaphira/BilliardsModule/ht8b_materials/procedural/{path}.png";
+        string output_path = $"{Application.dataPath}/metaphira/Modules/BilliardsModule/ht8b_materials/procedural/{path}.png";
 
         File.WriteAllBytes(output_path, writetex.EncodeToPNG());
     }
