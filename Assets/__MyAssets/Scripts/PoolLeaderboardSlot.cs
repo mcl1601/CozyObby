@@ -48,8 +48,8 @@ public class PoolLeaderboardSlot : UdonSharpBehaviour
         if(input == "Squatch_") {return rainbow(input);}
         if(input == "Chikenǃ") {return $"<color=#6c9fce>{input}</color>";}
         if(input == "Kat-") {return $"<color=#fdb8d1>{input}</color>";}
-        if(name == "~Can~") {return $"<color=#e681e5>{name}</color>";}
-        if(name == "~Hayashi~") {return $"<color=#3c8f43>{name}</color>";}
+        if(input == "~Can~") {return $"<color=#e681e5>{name}</color>";}
+        if(input == "~Hayashi~") {return $"<color=#3c8f43>{name}</color>";}
 
         return input;
     }

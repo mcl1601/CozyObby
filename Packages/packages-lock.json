@@ -12,6 +12,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.cyan.playerobjectpool": {
+      "version": "file:com.cyan.playerobjectpool",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.llealloo.audiolink": {
       "version": "file:com.llealloo.audiolink",
       "depth": 0,
@@ -59,8 +65,8 @@
       "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.8.4",
-        "com.unity.modules.unityanalytics": "1.0.0",
-        "com.unity.nuget.mono-cecil": "1.11.4"
+        "com.unity.nuget.mono-cecil": "1.11.4",
+        "com.unity.modules.unityanalytics": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -171,9 +177,9 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -202,9 +208,9 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.subsystems": "1.0.0",
         "com.unity.modules.vr": "1.0.0",
         "com.unity.modules.xr": "1.0.0",
+        "com.unity.modules.subsystems": "1.0.0",
         "com.unity.xr.legacyinputhelpers": "2.1.7"
       },
       "url": "https://packages.unity.com"
@@ -249,7 +255,8 @@
         "com.unity.cinemachine": "2.9.7",
         "com.unity.textmeshpro": "3.0.6",
         "com.unity.inputsystem": "1.2.0",
-        "com.unity.ai.navigation": "1.1.5"
+        "com.unity.ai.navigation": "1.1.5",
+        "com.unity.ugui": "1.0.0"
       }
     },
     "com.z3y.shaders": {
@@ -303,6 +310,18 @@
       "dependencies": {
         "com.unity.postprocessing": "3.1.1"
       }
+    },
+    "tlp.udonutils": {
+      "version": "file:tlp.udonutils",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "tlp.udonvoiceutils": {
+      "version": "file:tlp.udonvoiceutils",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "vrchat.jordo.easyquestswitch": {
       "version": "file:vrchat.jordo.easyquestswitch",

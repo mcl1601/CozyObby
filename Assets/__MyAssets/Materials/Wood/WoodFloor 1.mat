@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WoodFloor 1
-  m_Shader: {fileID: -6465566751694194690, guid: 0e960696e2935c4459c5e210b6935d7e,
+  m_Shader: {fileID: -6465566751694194690, guid: d81a63774aedf404484cdd1118f35b0c,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

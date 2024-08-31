@@ -18,10 +18,14 @@ namespace Kamishiro.VRChatUDON.AKSwitch
 
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
+            if(player != Networking.LocalPlayer) return;
+
             manager.State = savedState;
         }
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
+            if(player != Networking.LocalPlayer) return;
+            
             savedState = manager.State;
             manager.State = 0;
         }
