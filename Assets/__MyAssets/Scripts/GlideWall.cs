@@ -32,8 +32,12 @@ public class GlideWall : UdonSharpBehaviour
     {
         if(player != Networking.LocalPlayer) return;
 
-        Vector3 headForward = input.head.rotation * Vector3.forward;
-        Vector3 headRight = input.head.rotation * Vector3.right;
+        VRCPlayerApi.TrackingData data = Networking.LocalPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.Head);
+
+        /*Vector3 headForward = input.head.rotation * Vector3.forward;
+        Vector3 headRight = input.head.rotation * Vector3.right;*/
+        Vector3 headForward = data.rotation * Vector3.forward;
+        Vector3 headRight = data.rotation * Vector3.right;
         recalculatedVel += ((headForward * input.vertMove) + (headRight * input.horMove)) * Time.deltaTime * boostVal;
         player.SetVelocity(recalculatedVel);
     }

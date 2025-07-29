@@ -10,7 +10,7 @@ namespace Kamishiro.VRChatUDON.AKSwitch
     public class MirrorTriggerBox : UdonSharpBehaviour
     {
         [SerializeField] AKSwitch manager;
-        private int savedState = 0;
+        [SerializeField] private int savedState = 0;
         void Start()
         {
             

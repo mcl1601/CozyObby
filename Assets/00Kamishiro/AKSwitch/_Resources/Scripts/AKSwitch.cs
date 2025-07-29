@@ -97,7 +97,7 @@ namespace Kamishiro.VRChatUDON.AKSwitch
                     _SendExternalEvent();
                     _SetMaterialParameter();
                     _ToggleObjects();
-                    _PlayAudio();
+                    //_PlayAudio();
                 }
             }
         }

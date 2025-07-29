@@ -149,6 +149,6 @@ Material:
     - _specularAntiAliasingVariance: 0.15
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 6.4222355, g: 6.4222355, b: 6.4222355, a: 1}
+    - _EmissionColor: {r: 8.57419, g: 7.901705, b: 6.8929763, a: 1}
     - _WindIntensity: {r: 0.1, g: 0.1, b: 0.1, a: 0}
   m_BuildTextureStacks: []

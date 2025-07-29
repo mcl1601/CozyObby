@@ -125,7 +125,7 @@ namespace Mochie
         }
 
 
-        [MenuItem("Mochie/Texture Packer")]
+        [MenuItem("Tools/Mochie/Texture Packer")]
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
@@ -141,7 +141,7 @@ namespace Mochie
         void OnGUI()
         {
             EditorGUILayout.LabelField("Poi Texture Packer", PoiStyles.TitleLabel);
-			EditorGUILayout.LabelField("Provided by, and used with permission from Poiyomi");
+            EditorGUILayout.LabelField("Provided by, and used with permission from Poiyomi");
 
             selectedTab = GUILayout.Toolbar(selectedTab, TabNames);
 

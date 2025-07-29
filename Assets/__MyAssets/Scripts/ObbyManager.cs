@@ -8,11 +8,14 @@ using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common;
+using VRC.SDK3.Persistence;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class ObbyManager : UdonSharpBehaviour
 {
     #region Variables
+    [SerializeField]
+    private int courseId = -1;
     private Checkpoint activeCP;
     private float timer = 0f;
     private float bestTime = -1f;
@@ -44,6 +47,13 @@ public class ObbyManager : UdonSharpBehaviour
     public float[] leaderboardTimes;
     [UdonSynced]
     public int firstID;
+
+    private const string EASY_KEY = "easy";
+    private const string MED_KEY = "med";
+    private const string HARD_KEY = "hard";
+    private string EASY_CP = "ezcp";
+    private string MED_CP = "medcp";
+    private string HARD_CP = "hardcp";
     #endregion
 
     void Start()
@@ -205,6 +215,14 @@ public class ObbyManager : UdonSharpBehaviour
                 bestTimes = currentRun;
                 bestTime = timer;
 
+                PlayerData.SetFloat(courseId == 0 ? EASY_KEY : (courseId == 1 ? MED_KEY : HARD_KEY), bestTime);
+
+                for(int i = 0; i < bestTimes.Length; i++)
+                {
+                    string key = (courseId == 0 ? EASY_CP : (courseId == 1 ? MED_CP : HARD_CP)) + i.ToString();
+                    PlayerData.SetFloat(key, bestTimes[i]);
+                }
+
                 CheckForLeaderboard();
             }
 
@@ -236,6 +254,7 @@ public class ObbyManager : UdonSharpBehaviour
     public void TP9() {Networking.LocalPlayer.TeleportTo(devTPs[8].position, devTPs[8].rotation);ResetTimer();}
     public void TP10() {Networking.LocalPlayer.TeleportTo(devTPs[9].position, devTPs[9].rotation);ResetTimer();}
     public void TP11() {Networking.LocalPlayer.TeleportTo(devTPs[10].position, devTPs[10].rotation);ResetTimer();}
+    public void TP12() {Networking.LocalPlayer.TeleportTo(devTPs[11].position, devTPs[11].rotation);ResetTimer();}
     #endregion
 
     #region UI Functions
@@ -455,6 +474,61 @@ public class ObbyManager : UdonSharpBehaviour
         if(Networking.LocalPlayer == player)
         {
             RequestSerialization();
+        }
+    }
+
+    public override void OnPlayerRestored(VRCPlayerApi player)
+    {
+        if(Networking.LocalPlayer == player)
+        {
+            // load best time and splits
+            switch(courseId)
+            {
+                case 0:
+                    if(PlayerData.HasKey(player, EASY_KEY))
+                    {
+                        PlayerData.TryGetFloat(player, EASY_KEY, out bestTime);
+                        for(int i = 0; i < bestTimes.Length; i++)
+                        {
+                            float split = 0f;
+                            PlayerData.TryGetFloat(player, EASY_CP + i.ToString(), out split);
+                            bestTimes[i] = split;
+                        }
+
+                        CheckForLeaderboard();
+                    }
+                    break;
+                
+                case 1:
+                    if(PlayerData.HasKey(player, MED_KEY))
+                    {
+                        PlayerData.TryGetFloat(player, MED_KEY, out bestTime);
+                        for(int i = 0; i < bestTimes.Length; i++)
+                        {
+                            float split = 0f;
+                            PlayerData.TryGetFloat(player, MED_CP + i.ToString(), out split);
+                            bestTimes[i] = split;
+                        }
+
+                        CheckForLeaderboard();
+                    }
+                    break;
+                
+                case 2:
+                    if(PlayerData.HasKey(player, HARD_KEY))
+                    {
+                        PlayerData.TryGetFloat(player, HARD_KEY, out bestTime);
+                        for(int i = 0; i < bestTimes.Length; i++)
+                        {
+                            float split = 0f;
+                            PlayerData.TryGetFloat(player, HARD_CP + i.ToString(), out split);
+                            bestTimes[i] = split;
+                        }
+
+                        CheckForLeaderboard();
+                    }
+                    break;
+            }
         }
     }
     #endregion

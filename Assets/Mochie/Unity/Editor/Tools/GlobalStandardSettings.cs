@@ -9,15 +9,21 @@ namespace Mochie {
 
     public class GlobalStandardSettings : EditorWindow {
 
+        enum HueMode {HSV, Oklab}
+        enum ToggleOnOff {Off, On}
+
         bool applyToScene = true;
         bool inactive = true;
 
         Shader standardShader;
+        Shader standardLiteShader;
+        Shader standardMobileShader;
 
         List<Material> projectMaterials = new List<Material>();
         List<Material> sceneMaterials = new List<Material>();
         List<Material> standardMaterials = new List<Material>();
         List<Material> standardLiteMaterials = new List<Material>();
+        List<Material> standardMobileMaterials = new List<Material>();
         List<Material> standardUnityMaterials = new List<Material>();
 
         // Bakery settings
@@ -26,24 +32,23 @@ namespace Mochie {
         bool bicubicSampling = true;
         bool nonLinearSH = false;
         bool lightmapSpecular = false;
+        bool additiveLightVolumes = true;
 
         // Workflow settings
-        enum Workflow {Standard, Packed}
-        enum SampleMode {Default, Stochastic, Supersampled, Triplanar}
-        enum ColorChannel {Red, Green, Blue, Alpha}
-        enum ToggleOnOff {Off, On}
-        enum HueMode {HSV, Oklab}
+        // enum Workflow {Standard, Packed}
+        // enum SampleMode {Default, Stochastic, Supersampled, Triplanar}
+        // enum ColorChannel {Red, Green, Blue, Alpha}
 
-        Workflow workflowMode;
-        SampleMode sampleMode;
-        ColorChannel metallicChannel = ColorChannel.Blue;
-        ColorChannel roughnessChannel = ColorChannel.Green;
-        ColorChannel occlusionChannel = ColorChannel.Red;
-        ColorChannel heightChannel = ColorChannel.Alpha;
-        HueMode hueMode = HueMode.HSV;
-        ToggleOnOff smoothnessToggle;
+        // Workflow workflowMode;
+        // SampleMode sampleMode;
+        // ColorChannel metallicChannel = ColorChannel.Blue;
+        // ColorChannel roughnessChannel = ColorChannel.Green;
+        // ColorChannel occlusionChannel = ColorChannel.Red;
+        // ColorChannel heightChannel = ColorChannel.Alpha;
+        // ToggleOnOff smoothnessToggle;
 
         // Filtering settings
+        HueMode hueMode = HueMode.HSV;
         bool filteringToggle;
         float filteringHue = 0f;
         float filteringSat = 1f;
@@ -51,22 +56,49 @@ namespace Mochie {
         float filteringCont = 1f;
         float filteringACES = 0f;
 
-        [MenuItem("Mochie/Global Standard Settings")]
+        // Debug view
+        enum DebugView {
+            Off,
+            Base_Color,
+            Alpha,
+            Normals,
+            Roughness,
+            Metallic,
+            Occlusion,
+            Height,
+            Lighting,
+            Realtime_Shadows,
+            Reflections,
+            Specular_Highlights,
+            Vertex_Colors
+        }
+        DebugView debugView;
+
+        // Specularity Settings
+        enum SpecularityShadingModel {Unity_Standard, Google_Filament}
+        SpecularityShadingModel shadingModel;
+        bool reflToggle = true;
+        bool specToggle = true;
+
+        [MenuItem("Tools/Mochie/Global Standard Settings")]
         static void Init(){
             GlobalStandardSettings window = (GlobalStandardSettings)EditorWindow.GetWindow(typeof(GlobalStandardSettings));
             window.titleContent = new GUIContent("Standard Shader Settings");
-            window.minSize = new Vector2(300, 692);
-            window.maxSize = new Vector2(300, 692);
+            window.minSize = new Vector2(300, 939);
+            window.maxSize = new Vector2(300, 939);
             window.Show();
         }
 
         void Awake(){
             standardShader = Shader.Find("Mochie/Standard");
+            standardLiteShader = Shader.Find("Mochie/Standard Lite");
+            standardMobileShader = Shader.Find("Mochie/Standard Mobile");
             RefreshMaterials();
         }
 
         void OnGUI(){
             float buttonWidth = MGUI.GetInspectorWidth()-6f;
+            float groupButtonWidth = MGUI.GetInspectorWidth()-14f;
             
             EditorGUI.BeginChangeCheck();
             applyToScene = EditorGUILayout.Toggle("Scene Materials Only", applyToScene);
@@ -76,50 +108,102 @@ namespace Mochie {
             if (EditorGUI.EndChangeCheck()){
                 RefreshMaterials();
             }
-
-            // MGUI.DisplayWarning("Please note that changes made with this utility cannot be automatically undone, pick your settings carefully!");
             
             string lol = applyToScene ? "material slots in scene" : "materials in project";
-            MGUI.DisplayText("Found " + standardMaterials.Count + " Mochie Standard " + lol + "\nFound " + standardLiteMaterials.Count + " Mochie Standard Lite " + lol + "\nFound " + standardUnityMaterials.Count + " Unity Standard " + lol);
+            MGUI.DisplayText("Found " + standardMaterials.Count + " Mochie Standard " + lol + "\nFound " + standardLiteMaterials.Count + " Mochie Standard Lite " + lol + "\nFound " + standardMobileMaterials.Count + " Mochie Standard Mobile "+ lol + "\nFound " + standardUnityMaterials.Count + " Unity Standard " + lol);
 
-            if (MGUI.SimpleButton("Refresh Materials List", buttonWidth, 0f)){
+            if (MGUI.SimpleButton("Refresh Materials List", groupButtonWidth, 0f)){
                 RefreshMaterials();
             }
 
-            if (MGUI.SimpleButton("Migrate From Mochie Standard Lite", buttonWidth, 0f)){
-                MigrateFromLite();
-            }
-
-            if (MGUI.SimpleButton("Migrate From Unity Standard", buttonWidth, 0f)){
-                MigrateFromUnityStandard();
+            if (MGUI.SimpleButton("Restore Default Textures", groupButtonWidth, 0f)){
+                RestoreDefaultTextures();
             }
 
             MGUI.Space8();
-            MGUI.BoldLabel("Workflow Settings");
+            MGUI.BoldLabel("Shader Swapper");
             MGUI.PropertyGroup(()=>{
-                workflowMode = (Workflow)EditorGUILayout.EnumPopup("Workflow", workflowMode);
-                sampleMode = (SampleMode)EditorGUILayout.EnumPopup("Sample Mode", sampleMode);
-                smoothnessToggle = (ToggleOnOff)EditorGUILayout.EnumPopup("Smoothness", smoothnessToggle);
-                MGUI.ToggleGroup(workflowMode != Workflow.Packed);
-                    MGUI.PropertyGroup(()=>{
-                        metallicChannel = (ColorChannel)EditorGUILayout.EnumPopup("Metallic Channel", metallicChannel);
-                        roughnessChannel = (ColorChannel)EditorGUILayout.EnumPopup("Roughness Channel", roughnessChannel);
-                        occlusionChannel = (ColorChannel)EditorGUILayout.EnumPopup("Occlusion Channel", occlusionChannel);
-                        heightChannel = (ColorChannel)EditorGUILayout.EnumPopup("Height Channel", heightChannel);
-                    });
-                MGUI.ToggleGroupEnd();
+                if (MGUI.SimpleButton("Standard > Standard Lite", groupButtonWidth, 0f)){
+                    MigrateFromStandardToLite();
+                }
+                if (MGUI.SimpleButton("Standard > Standard Mobile", groupButtonWidth, 0f)){
+                    MigrateFromStandardToMobile();
+                }
+            });
+            MGUI.PropertyGroup(()=>{
+                if (MGUI.SimpleButton("Standard Lite > Standard", groupButtonWidth, 0f)){
+                    MigrateFromLiteToStandard();
+                }
+                if (MGUI.SimpleButton("Standard Lite > Standard Mobile", groupButtonWidth, 0f)){
+                    MigrateFromLiteToMobile();
+                }
+            });
+            MGUI.PropertyGroup(()=>{
+                if (MGUI.SimpleButton("Standard Mobile > Standard", groupButtonWidth, 0f)){
+                    MigrateFromMobileToStandard();
+                }
+                if (MGUI.SimpleButton("Standard Mobile > Standard Lite", groupButtonWidth, 0f)){
+                    MigrateFromMobileToLite();
+                }
+            });
+            MGUI.PropertyGroup(()=>{
+                if (MGUI.SimpleButton("Unity Standard > Standard", groupButtonWidth, 0f)){
+                    MigrateFromUnityStandardToStandard();
+                }
+                if (MGUI.SimpleButton("Unity Standard > Standard Lite", groupButtonWidth, 0f)){
+                    MigrateFromUnityStandardToLite();
+                }
+                if (MGUI.SimpleButton("Unity Standard > Standard Mobile", groupButtonWidth, 0f)){
+                    MigrateFromUnityStandardToMobile();
+                }
+            });
+
+            // Removing this cuz honestly idk when you'd ever wanna apply settings like this on a project/scene level
+            // MGUI.Space8();
+            // MGUI.BoldLabel("Workflow Settings");
+            // MGUI.PropertyGroup(()=>{
+            //     workflowMode = (Workflow)EditorGUILayout.EnumPopup("Workflow", workflowMode);
+            //     sampleMode = (SampleMode)EditorGUILayout.EnumPopup("Sample Mode", sampleMode);
+            //     smoothnessToggle = (ToggleOnOff)EditorGUILayout.EnumPopup("Smoothness", smoothnessToggle);
+            //     MGUI.ToggleGroup(workflowMode != Workflow.Packed);
+            //         MGUI.PropertyGroup(()=>{
+            //             metallicChannel = (ColorChannel)EditorGUILayout.EnumPopup("Metallic Channel", metallicChannel);
+            //             roughnessChannel = (ColorChannel)EditorGUILayout.EnumPopup("Roughness Channel", roughnessChannel);
+            //             occlusionChannel = (ColorChannel)EditorGUILayout.EnumPopup("Occlusion Channel", occlusionChannel);
+            //             heightChannel = (ColorChannel)EditorGUILayout.EnumPopup("Height Channel", heightChannel);
+            //         });
+            //     MGUI.ToggleGroupEnd();
+            // });
+            // if (MGUI.SimpleButton("Apply", buttonWidth, 0f)){
+            //     ApplyWorkflowSettings();
+            // }
+
+            MGUI.Space8();
+            EditorGUI.BeginChangeCheck();
+            debugView = (DebugView)EditorGUILayout.EnumPopup("Debug View", debugView);
+            if (EditorGUI.EndChangeCheck()){
+                ApplyDebugView();
+            }
+
+            MGUI.Space8();
+            MGUI.BoldLabel("Specularity Settings");
+            MGUI.PropertyGroup(()=>{
+                shadingModel = (SpecularityShadingModel)EditorGUILayout.EnumPopup("Shading Model", shadingModel);
+                reflToggle = EditorGUILayout.Toggle("Reflections", reflToggle);
+                specToggle = EditorGUILayout.Toggle("Specular Highlights", specToggle);
             });
             if (MGUI.SimpleButton("Apply", buttonWidth, 0f)){
-                ApplyWorkflowSettings();
+                ApplySpecSettings();
             }
 
             MGUI.Space8();
-            MGUI.BoldLabel("Bakery Settings");
+            MGUI.BoldLabel("Lightmapping Settings");
             MGUI.PropertyGroup(()=>{
                 dirMode = (BakeryMode)EditorGUILayout.EnumPopup("Directional Mode", dirMode);
-                bicubicSampling = EditorGUILayout.Toggle("Bicubic Lightmapping", bicubicSampling);
+                bicubicSampling = EditorGUILayout.Toggle("Bicubic Sampling", bicubicSampling);
                 nonLinearSH = EditorGUILayout.Toggle("Non-Linear SH", nonLinearSH);
                 lightmapSpecular = EditorGUILayout.Toggle("Lightmap Specular", lightmapSpecular);
+                additiveLightVolumes = EditorGUILayout.Toggle("Additive Light Volumes", additiveLightVolumes);
             });
             if (MGUI.SimpleButton("Apply", buttonWidth, 0f)){
                 ApplyBakerySettings();
@@ -141,9 +225,30 @@ namespace Mochie {
             if (MGUI.SimpleButton("Apply", buttonWidth, 0f)){
                 ApplyFilterSettings();
             }
+
+            MGUI.Space8();
+            MGUI.DisplayWarning("Please note that changes made with this utility cannot be undone, pick your settings carefully!");
         }
         
-        void MigrateFromLite(){
+        void MigrateFromStandardToLite(){
+            if (standardMaterials != null){
+                foreach(Material m in standardMaterials){
+                    m.shader = standardLiteShader;
+                }
+            }
+            RefreshMaterials();
+        }
+
+        void MigrateFromStandardToMobile(){
+            if (standardMaterials != null){
+                foreach(Material m in standardMaterials){
+                    m.shader = standardMobileShader;
+                }
+            }
+            RefreshMaterials();
+        }
+
+        void MigrateFromLiteToStandard(){
             if (standardLiteMaterials != null){
                 foreach(Material m in standardLiteMaterials){
                     m.shader = standardShader;
@@ -152,7 +257,34 @@ namespace Mochie {
             RefreshMaterials();
         }
 
-        void MigrateFromUnityStandard(){
+        void MigrateFromLiteToMobile(){
+            if (standardLiteMaterials != null){
+                foreach(Material m in standardLiteMaterials){
+                    m.shader = standardMobileShader;
+                }
+            }
+            RefreshMaterials();
+        }
+
+        void MigrateFromMobileToStandard(){
+            if (standardMobileMaterials != null){
+                foreach(Material m in standardMobileMaterials){
+                    m.shader = standardShader;
+                }
+            }
+            RefreshMaterials();
+        }
+
+        void MigrateFromMobileToLite(){
+            if (standardMobileMaterials != null){
+                foreach(Material m in standardMobileMaterials){
+                    m.shader = standardLiteShader;
+                }
+            }
+            RefreshMaterials();
+        }
+
+        void MigrateFromUnityStandardToStandard(){
             if (standardUnityMaterials != null){
                 foreach (Material m in standardUnityMaterials){
                     m.shader = standardShader;
@@ -161,8 +293,30 @@ namespace Mochie {
             RefreshMaterials();
         }
 
+        void MigrateFromUnityStandardToLite(){
+            if (standardUnityMaterials != null){
+                foreach (Material m in standardUnityMaterials){
+                    m.shader = standardLiteShader;
+                }
+            }
+            RefreshMaterials();
+        }
+
+        void MigrateFromUnityStandardToMobile(){
+            if (standardUnityMaterials != null){
+                foreach (Material m in standardUnityMaterials){
+                    m.shader = standardMobileShader;
+                }
+            }
+            RefreshMaterials();
+        }
+
         void ApplyBakerySettings(){
-            foreach (Material m in standardMaterials){
+            List<Material> materials = new List<Material>();
+            materials.AddRange(standardMaterials);
+            materials.AddRange(standardLiteMaterials);
+            materials.AddRange(standardMobileMaterials);
+            foreach (Material m in materials){
 
                 // Directional Mode
                 m.SetInt("_BakeryMode", (int)dirMode);
@@ -171,7 +325,7 @@ namespace Mochie {
                 MGUI.SetKeyword(m, "BAKERY_MONOSH", dirMode == BakeryMode.MonoSH);
 
                 // Bicubic Lightmapping
-                m.SetInt("_BicubicLightmap", bicubicSampling ? 1 : 0);
+                m.SetInt("_BicubicSampling", bicubicSampling ? 1 : 0);
                 MGUI.SetKeyword(m, "_BICUBIC_SAMPLING_ON", bicubicSampling);
 
                 // Nonlinear SH
@@ -181,49 +335,59 @@ namespace Mochie {
                 // Lightmapped Specular
                 m.SetInt("_BAKERY_LMSPEC", lightmapSpecular ? 1 : 0);
                 MGUI.SetKeyword(m, "BAKERY_LMSPEC", lightmapSpecular);
+
+                // Additive light volumes
+                m.SetInt("_AdditiveLightVolumesToggle", additiveLightVolumes ? 1 : 0);
             }
         }
 
-        void ApplyWorkflowSettings(){
-            foreach (Material m in standardMaterials){
+        // void ApplyWorkflowSettings(){
+        //     List<Material> materials = new List<Material>();
+        //     materials.AddRange(standardMaterials);
+        //     materials.AddRange(standardLiteMaterials);
+        //     materials.AddRange(standardMobileMaterials);
+        //     foreach (Material m in materials){
 
-                // Workflow
-                m.SetInt("_Workflow", (int)workflowMode);
-                MGUI.SetKeyword(m, "_WORKFLOW_PACKED_ON", workflowMode == Workflow.Packed);
+        //         // Workflow
+        //         m.SetInt("_PrimaryWorkflow", (int)workflowMode);
+        //         MGUI.SetKeyword(m, "_WORKFLOW_PACKED_ON", workflowMode == Workflow.Packed);
 
-                // Sample Mode
-                m.SetInt("_SamplingMode", (int)sampleMode);
-                MGUI.SetKeyword(m, "_STOCHASTIC_ON", sampleMode == SampleMode.Stochastic);
-                MGUI.SetKeyword(m, "_TSS_ON", sampleMode == SampleMode.Supersampled);
-                MGUI.SetKeyword(m, "_TRIPLANAR_ON", sampleMode == SampleMode.Triplanar);
+        //         // Sample Mode
+        //         m.SetInt("_PrimarySampleMode", (int)sampleMode);
+        //         MGUI.SetKeyword(m, "_STOCHASTIC_ON", sampleMode == SampleMode.Stochastic);
+        //         MGUI.SetKeyword(m, "_SUPERSAMPLING_ON", sampleMode == SampleMode.Supersampled);
+        //         MGUI.SetKeyword(m, "_TRIPLANAR_ON", sampleMode == SampleMode.Triplanar);
 
-                // Smoothness Toggle
-                m.SetInt("_UseSmoothness", (int)smoothnessToggle);
+        //         // Smoothness Toggle
+        //         m.SetInt("_SmoothnessToggle", (int)smoothnessToggle);
 
-                // Channel Settings
-                if (workflowMode == Workflow.Packed){
-                    m.SetInt("_RoughnessChannel", (int)roughnessChannel);
-                    m.SetInt("_MetallicChannel", (int)metallicChannel);
-                    m.SetInt("_OcclusionChannel", (int)occlusionChannel);
-                    m.SetInt("_HeightChannel", (int)heightChannel);
+        //         // Channel Settings
+        //         if (workflowMode == Workflow.Packed){
+        //             m.SetInt("_RoughnessChannel", (int)roughnessChannel);
+        //             m.SetInt("_MetallicChannel", (int)metallicChannel);
+        //             m.SetInt("_OcclusionChannel", (int)occlusionChannel);
+        //             m.SetInt("_HeightChannel", (int)heightChannel);
 
-                    // Since packed texture is a separate slot, move an existing PBR texture into it when there is no existing packed map
-                    if (m.GetTexture("_PackedMap") == null){
-                        if (m.GetTexture("_SpecGlossMap") != null)
-                            m.SetTexture("_PackedMap", m.GetTexture("_SpecGlossMap"));
-                        else if (m.GetTexture("_MetallicGlossMap") != null)
-                            m.SetTexture("_PackedMap", m.GetTexture("_MetallicGlossMap"));
-                        else if (m.GetTexture("_OcclusionMap") != null)
-                            m.SetTexture("_PackedMap", m.GetTexture("_OcclusionMap"));
-                        else if (m.GetTexture("_ParallaxMap") != null)
-                            m.SetTexture("_PackedMap", m.GetTexture("_ParallaxMap"));
-                    }
-                }       
-            }
-        }
+        //             // Since packed texture is a separate slot, move an existing PBR texture into it when there is no existing packed map
+        //             if (m.GetTexture("_PackedMap") == null){
+        //                 if (m.GetTexture("_RoughnessMap") != null)
+        //                     m.SetTexture("_PackedMap", m.GetTexture("_RoughnessMap"));
+        //                 else if (m.GetTexture("_MetallicMap") != null)
+        //                     m.SetTexture("_PackedMap", m.GetTexture("_MetallicMap"));
+        //                 else if (m.GetTexture("_OcclusionMap") != null)
+        //                     m.SetTexture("_PackedMap", m.GetTexture("_OcclusionMap"));
+        //                 else if (m.GetTexture("_HeightMap") != null)
+        //                     m.SetTexture("_PackedMap", m.GetTexture("_HeightMap"));
+        //             }
+        //         }       
+        //     }
+        // }
 
         void ApplyFilterSettings(){
-            foreach(Material m in standardMaterials){
+            List<Material> materials = new List<Material>();
+            materials.AddRange(standardMaterials);
+            materials.AddRange(standardLiteMaterials);
+            foreach (Material m in materials){
                 m.SetInt("_Filtering", filteringToggle ? 1 : 0);
                 if (filteringToggle){
                     m.SetFloat("_HuePost", filteringHue);
@@ -233,6 +397,50 @@ namespace Mochie {
                     m.SetFloat("_ContrastPost", filteringCont);
                     m.SetFloat("_ACES", filteringACES);
                 }
+            }
+        }
+
+        void ApplySpecSettings(){
+            List<Material> materials = new List<Material>();
+            materials.AddRange(standardMaterials);
+            materials.AddRange(standardLiteMaterials);
+            materials.AddRange(standardMobileMaterials);
+            foreach (Material m in materials){
+                MGUI.SetKeyword(m, "_REFLECTIONS_ON", reflToggle);
+                MGUI.SetKeyword(m, "_SPECULARHIGHLIGHTS_ON", specToggle);
+                m.SetInt("_ReflectionsToggle", reflToggle ? 1 : 0);
+                m.SetInt("_SpecularHighlightsToggle", specToggle ? 1 : 0);
+                m.SetInt("_ShadingModel", (int)shadingModel);
+            }
+        }
+
+        void ApplyDebugView(){
+            List<Material> materials = new List<Material>();
+            materials.AddRange(standardMaterials);
+            materials.AddRange(standardLiteMaterials);
+            materials.AddRange(standardMobileMaterials);
+            foreach (Material m in materials){
+                HandleDebugView(m);
+            }
+        }
+
+        void RestoreDefaultTextures(){
+            List<Material> materials = new List<Material>();
+            materials.AddRange(standardMaterials);
+            materials.AddRange(standardLiteMaterials);
+            materials.AddRange(standardMobileMaterials);
+            string texFolder = "Assets/Mochie/Unity/Textures/";
+            Texture dfgTex = AssetDatabase.LoadAssetAtPath(texFolder + "dfg-multiscatter.exr", typeof(Texture)) as Texture;
+            Texture rainSheetTex = AssetDatabase.LoadAssetAtPath(texFolder + "Glass_Rain_Texturesheet.png", typeof(Texture)) as Texture;
+            Texture defaultTex = AssetDatabase.LoadAssetAtPath(texFolder + "Default White Swatch.png", typeof(Texture)) as Texture;
+            Texture dropletMaskTex = AssetDatabase.LoadAssetAtPath(texFolder + "Droplet Mask.tif", typeof(Texture)) as Texture;
+            Texture ssrNoiseTex = AssetDatabase.LoadAssetAtPath(texFolder + "SSR Noise.png", typeof(Texture)) as Texture;
+            foreach (Material m in materials){
+                m.SetTexture("_DefaultSampler", defaultTex);
+                m.SetTexture("_DFG", dfgTex);
+                m.SetTexture("_RainSheet", rainSheetTex);
+                m.SetTexture("_DropletMask", dropletMaskTex);
+                m.SetTexture("_NoiseTexSSR", ssrNoiseTex);
             }
         }
 
@@ -248,6 +456,7 @@ namespace Mochie {
             sceneMaterials.Clear();
             standardMaterials.Clear();
             standardLiteMaterials.Clear();
+            standardMobileMaterials.Clear();
             standardUnityMaterials.Clear();
         }
 
@@ -269,13 +478,11 @@ namespace Mochie {
                     if (shaderName == "Mochie/Standard"){
                         standardMaterials.Add(m);
                     }
-                    else if (shaderName == "Mochie/Standard (Lite)"){
+                    else if (shaderName == "Mochie/Standard (Lite)" || shaderName == "Mochie/Standard Lite"){
                         standardLiteMaterials.Add(m);
                     }
-                    else if (shaderName == "Hidden/InternalErrorShader"){
-                        if (File.ReadAllText(AssetDatabase.GetAssetPath(m)).Contains("610b05107fb18e34a8bb23f82f253b50")){
-                            standardLiteMaterials.Add(m);
-                        }
+                    else if (shaderName == "Mochie/Standard Mobile"){
+                        standardMobileMaterials.Add(m);
                     }
                     else if (shaderName == "Standard" || shaderName == "Autodesk Interactive"){
                         standardUnityMaterials.Add(m);
@@ -295,6 +502,212 @@ namespace Mochie {
                 }
             }
             return assets;
+        }
+
+        void HandleDebugView(Material m){
+            switch(debugView){
+                case DebugView.Off:
+                    ToggleDebugView(m, 0);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Base_Color:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 1);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Alpha:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 1);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Normals:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 1);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Roughness:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 1);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Metallic:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 1);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Occlusion:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 1);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Height:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 1);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Lighting:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 1);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Realtime_Shadows:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 1);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Reflections:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 1);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Specular_Highlights:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 1);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 0);
+                    break;
+                case DebugView.Vertex_Colors:
+                    ToggleDebugView(m, 1);
+                    m.SetFloat("_DebugBaseColor", 0);
+                    m.SetFloat("_DebugNormals", 0);
+                    m.SetFloat("_DebugRoughness", 0);
+                    m.SetFloat("_DebugMetallic", 0);
+                    m.SetFloat("_DebugOcclusion", 0);
+                    m.SetFloat("_DebugHeight", 0);
+                    m.SetFloat("_DebugAtten", 0);
+                    m.SetFloat("_DebugReflections", 0);
+                    m.SetFloat("_DebugSpecular", 0);
+                    m.SetFloat("_DebugAlpha", 0);
+                    m.SetFloat("_DebugLighting", 0);
+                    m.SetFloat("_DebugVertexColors", 1);
+                    break;
+                default: ToggleDebugView(m, 0); break;
+            }
+        }
+
+        void ToggleDebugView(Material m, int state){
+            m.SetFloat("_MaterialDebugMode", state);
+            m.SetFloat("_DebugEnable", state);
         }
     }
 }

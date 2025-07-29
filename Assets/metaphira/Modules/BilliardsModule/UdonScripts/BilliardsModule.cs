@@ -42,7 +42,7 @@ public class BilliardsModule : UdonSharpBehaviour
     [SerializeField] [HideInInspector] public Color k_colour_off = new Color(0.01f, 0.01f, 0.01f, 1.0f);
 
     // 8/9 ball
-    [SerializeField] [HideInInspector] public Color k_teamColour_spots;   // v1.6: ( 0.00, 0.75, 1.75, 1.0 )
+    [SerializeField]  public Color k_teamColour_spots;   // v1.6: ( 0.00, 0.75, 1.75, 1.0 )
     [SerializeField] [HideInInspector] public Color k_teamColour_stripes; // v1.6: ( 1.75, 0.25, 0.00, 1.0 )
 
     // 4 ball

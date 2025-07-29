@@ -3,11 +3,16 @@
 
 #include "../Common/Sampling.cginc"
 #include "PSKeyDefines.cginc"
-#include "UnityCG.cginc"
+#include "UnityStandardUtils.cginc"
+#include "../Common/ThirdParty.cginc"
+#include "AutoLight.cginc"
+
 
 MOCHIE_DECLARE_TEX2D_SCREENSPACE(_CameraDepthTexture);
 float4 _CameraDepthTexture_TexelSize;
 sampler2D _MainTex;
+sampler2D _NormalMapLighting;
+float _NormalMapLightingScale;
 float4 _Color, _SecondColor;
 int _Falloff, _IsCutout, _BlendMode, _Softening, _Pulse, _Waveform, _FlipbookBlending;
 int _FalloffMode;
@@ -52,40 +57,47 @@ float _AudioLinkRemapCutoutMax;
 struct appdata {
     float3 vertex : POSITION;
     float4 uv0 : TEXCOORD0;
-	float3 center : TEXCOORD1;
-	float4 color : COLOR;
-	UNITY_VERTEX_INPUT_INSTANCE_ID
+    float4 animBlend : TEXCOORD1;
+    float3 center : TEXCOORD2;
+    float4 color : COLOR;
+    float4 tangent : TANGENT;
+    float4 normal : NORMAL;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
 struct v2f {
     float4 pos : SV_POSITION;
     float4 uv0 : TEXCOORD0;
-	#if DISTORTION_ENABLED
-		float4 uv1 : TEXCOORD1;
-	#endif
-	#if FALLOFF_ENABLED
-    	float falloff : TEXCOORD2;
-		float3 center : TEXCOORD3;
-		float3 vertex : TEXCOORD4;
-	#endif
-	#if FADING_ENABLED
-    	float4 projPos : TEXCOORD5;
-	#endif
-	#if PULSE_ENABLED
-		float pulse : TEXCOORD6;
-	#endif
-	float4 color : COLOR;
-    UNITY_FOG_COORDS(8)
-	UNITY_VERTEX_INPUT_INSTANCE_ID
+    #if FLIPBOOK_BLEND_ENABLED
+        float animBlend : TEXCOORD1;
+    #endif
+    #if DISTORTION_ENABLED
+        float4 uv1 : TEXCOORD2;
+    #endif
+    #if FALLOFF_ENABLED
+        float falloff : TEXCOORD3;
+        float3 center : TEXCOORD4;
+        float3 vertex : TEXCOORD5;
+    #endif
+    float4 projPos : TEXCOORD6;
+    #if PULSE_ENABLED
+        float pulse : TEXCOORD7;
+    #endif
+    float4 color : COLOR;
+    float3 worldPos : TEXCOORD8;
+    float3 normal : TEXCOORD9;
+    float4 tangent : TEXCOORD10;
+    UNITY_FOG_COORDS(11)
+    UNITY_VERTEX_INPUT_INSTANCE_ID
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
 struct audioLinkData {
-	bool textureExists;
-	float bass;
-	float lowMid;
-	float upperMid;
-	float treble;
+    bool textureExists;
+    float bass;
+    float lowMid;
+    float upperMid;
+    float treble;
 };
 
 #include "../Common/Utilities.cginc"

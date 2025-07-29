@@ -11,7 +11,8 @@ public class MuffleSoundManager : UdonSharpBehaviour
     
     void Start()
     {
-        
+        //SendCustomEventDelayedFrames(nameof(DisableMuffled), 1);
+        DisableMuffled();
     }
 
     public void DoNormalAudio()
@@ -49,6 +50,15 @@ public class MuffleSoundManager : UdonSharpBehaviour
         {
             actuallyOn = false;
             DoNormalAudio();
+        }
+    }
+
+    private void DisableMuffled()
+    {
+        Debug.Log("disabling");
+        for(int i = 0; i < muffledAudioSources.Length; i++)
+        {
+            muffledAudioSources[i].gameObject.SetActive(false);
         }
     }
 }

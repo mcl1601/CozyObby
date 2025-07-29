@@ -873,7 +873,7 @@ Material:
     - _FurDebugUpperLimit: 0
     - _FurDebugVerticies: 0
     - _FurGravitySlider: 0.286
-    - _FurLightingGroup: 0
+    - _FurLightingGroup: 1
     - _FurMarkingsActive: 0
     - _FurMinHeight: 0.026
     - _FurShadowCastSize: 0.35
@@ -1373,7 +1373,7 @@ Material:
     - _V4Quality2DMirror: 2
     - _V4QualityCameraPhoto: 15
     - _V4QualityCameraView: 1
-    - _V4QualityEditor: 5
+    - _V4QualityEditor: 3
     - _V4QualityScreenshot: 15
     - _V4QualityStreamCamera: 2
     - _V4QualityVR: 2
@@ -1406,7 +1406,7 @@ Material:
     - _WireframeToggle: 0
     - _WireframeTransparency: 0
     - _Workflow: 0
-    - _WorldLightGroup: 0
+    - _WorldLightGroup: 1
     - _WorldLightReColourStrength: 0
     - _WrappingFactor: 0.01
     - _ZTest: 4

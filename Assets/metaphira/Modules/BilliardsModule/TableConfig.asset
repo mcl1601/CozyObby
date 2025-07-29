@@ -39,7 +39,7 @@ MonoBehaviour:
   _4ball_team_colour_1: {r: 1, g: 0.8117648, b: 0, a: 1}
   _4ball_objective_colour: {r: 0.9725491, g: 0, b: 0, a: 1}
   _src_ball_content: {fileID: 2800000, guid: db507d928e33d10428df362dff4c361e, type: 3}
-  _src_ball_spinmarkers: {fileID: 2800000, guid: d14bdee7753cb3b438a8a0d9533b2d5f,
+  _src_ball_spinmarkers: {fileID: 2800000, guid: a4ff87018a73d9e40967e7e4050ce1c1,
     type: 3}
   _table_surface_mat: {fileID: 0}
   _ball_mat: {fileID: 0}
